@@ -60,6 +60,15 @@ async def test_warmup_is_written_apart_from_the_numbered_runs(fake, tmp_path):
     assert not list(out.glob("run-*.json"))
 
 
+async def test_batch_lock_owner_is_recorded_when_the_caller_holds_the_lock(fake, tmp_path):
+    fake.token_delay = 0.001
+    out = tmp_path / "runs" / "fp16"
+    await run_cli("bench", "--url", fake.url, "--arm", "fp16", "--out", out, "--levels", "1",
+                  "--open-rates", "", "--cooldown", 0, "--max-tokens", 4, "--batch-lock-owner", "P4")
+    run = json.loads((out / "run-01.json").read_text(encoding="utf-8"))
+    assert run["lock"] == {"owner": "P4", "scope": "held by the caller across a batch of passes"}
+
+
 async def test_warmup_first_runs_inside_the_pass_and_is_not_counted(fake, tmp_path):
     fake.token_delay = 0.001
     lock = tmp_path / "m.lock"

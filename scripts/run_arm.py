@@ -5,13 +5,12 @@
 Steps: stop any other arm's server, start this arm with its Compose profile (plus Prometheus,
 Grafana and the GPU exporter), wait for the server's health check, keep the startup log and a
 /metrics sample, record the GPU memory with the model loaded and idle, then `--runs` timed passes
-(each holding the measurement lock, if one is given, and starting with a short uncounted warm-up)
-and `--runs` quality runs, and finally ask check_stack.py to evaluate the dashboard against
-Prometheus.
+(one batch: the measurement lock, if one is given, is taken once and held across them, and each
+pass starts with a short uncounted warm-up) and `--runs` quality runs (not timed, no lock), and
+finally ask check_stack.py to evaluate the dashboard against Prometheus.
 
-Between two timed passes the lock is free for `--pause-between-runs` seconds, so other work that
-shares the machine can take its turn. `--first-run N` and `--reuse-server` continue an arm whose
-server is already up and whose first N-1 runs are on disk.
+`--first-run N` and `--reuse-server` continue an arm whose server is already up and whose first
+N-1 runs are on disk.
 """
 import argparse
 import datetime
@@ -21,6 +20,8 @@ import sys
 import time
 import urllib.request
 from pathlib import Path
+
+from servebench.lock import MeasurementLock
 
 ROOT = Path(__file__).resolve().parent.parent
 ARMS = json.loads((ROOT / "arms.json").read_text(encoding="utf-8"))
@@ -90,8 +91,8 @@ def main():
     ap.add_argument("--runs", type=int, default=5)
     ap.add_argument("--first-run", type=int, default=1, help="continue from this run number")
     ap.add_argument("--reuse-server", action="store_true", help="the arm's server is already up")
-    ap.add_argument("--pause-between-runs", type=float, default=20.0,
-                    help="seconds without the lock between two timed passes")
+    ap.add_argument("--pause-between-runs", type=float, default=0.0,
+                    help="seconds to wait between two timed passes (the lock is kept)")
     ap.add_argument("--results", default="results")
     ap.add_argument("--lock-file", default=None)
     ap.add_argument("--lock-owner", default="servebench")
@@ -105,22 +106,33 @@ def main():
     results = (ROOT / args.results).resolve()
     server_dir = results / "server" / args.arm
     server_dir.mkdir(parents=True, exist_ok=True)
-    lock_args = (["--lock-file", args.lock_file, "--lock-owner", args.lock_owner, "--lock-poll", "0.05"]
-                 if args.lock_file else [])
-
     if args.reuse_server:
         fetch("/health")          # raises if the server is not answering
         print(f"{args.arm}: reusing the running server", flush=True)
     else:
         start_server(args, arm, server_dir)
 
-    # every timed pass starts with a short uncounted warm-up inside the same lock hold
-    for n in range(args.first_run, args.runs + 1):
-        if n > args.first_run:
-            time.sleep(args.pause_between_runs)
-        servebench("bench", "--url", URL, "--arm", args.arm, "--run", str(n),
-                   "--out", str(results / "runs" / args.arm), "--open-rates", args.open_rates,
-                   "--open-duration", str(args.open_duration), "--warmup-first", *lock_args)
+    # The arm's timed passes are one batch: the lock is taken once and held across them (the other users of
+    # the machine hold it the same way, a batch at a time). Every pass starts with a short uncounted warm-up.
+    lock = None
+    batch_args = []
+    if args.lock_file:
+        lock = MeasurementLock(args.lock_file, args.lock_owner, poll_s=0.05)
+        print(f"{args.arm}: waiting for the measurement lock ...", flush=True)
+        lock.acquire()
+        print(f"{args.arm}: lock taken after {lock.waited_s:.0f} s at {utc_now()}", flush=True)
+        batch_args = ["--batch-lock-owner", args.lock_owner]
+    try:
+        for n in range(args.first_run, args.runs + 1):
+            if n > args.first_run:
+                time.sleep(args.pause_between_runs)
+            servebench("bench", "--url", URL, "--arm", args.arm, "--run", str(n),
+                       "--out", str(results / "runs" / args.arm), "--open-rates", args.open_rates,
+                       "--open-duration", str(args.open_duration), "--warmup-first", *batch_args)
+    finally:
+        if lock:
+            lock.release()
+            print(f"{args.arm}: lock released at {utc_now()}", flush=True)
     (server_dir / "metrics-sample.txt").write_text(fetch("/metrics"), encoding="utf-8", newline="\n")
     if not args.skip_quality:
         for n in range(1, args.runs + 1):

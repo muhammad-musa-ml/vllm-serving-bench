@@ -149,7 +149,10 @@ def cmd_bench(args) -> int:
         },
         "server": info,
         "gpu_before_pass": idle,
-        "lock": ({"owner": args.lock_owner, "waited_s": lock.waited_s} if lock else None),
+        "lock": ({"owner": args.lock_owner, "waited_s": lock.waited_s} if lock
+                 else ({"owner": args.batch_lock_owner,
+                        "scope": "held by the caller across a batch of passes"}
+                       if args.batch_lock_owner else None)),
         "machine": {"python": sys.version.split()[0], "platform": platform.platform(),
                     "aiohttp": aiohttp.__version__},
         "warmup_pass": warmup_pass,
@@ -218,6 +221,8 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--lock-owner", default="servebench")
         sp.add_argument("--lock-poll", type=float, default=2.0,
                         help="seconds between attempts to take the lock file")
+        sp.add_argument("--batch-lock-owner", default=None,
+                        help="record that the caller already holds the measurement lock for a batch")
 
     b = sub.add_parser("bench", help="one load pass: every closed-loop level, then open-loop rates")
     common(b)
