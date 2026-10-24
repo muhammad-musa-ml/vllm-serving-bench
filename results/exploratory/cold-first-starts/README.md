@@ -12,5 +12,7 @@ come from those starts. The headline runs started every server again with a warm
 
 With the cache warm the same flags gave a larger KV cache (fp16 54,352 tokens, awq 127,280; see
 `results/server/<arm>/facts.json`) and a much shorter engine init (17 s for fp16). Free memory at start
-was 4.95 GiB in both cases. So the KV-cache capacity of a server depends on whether the compile workspace
-was still allocated when vLLM measured what was left; compare arms only at the same cache state.
+was 4.95 GiB in both cases. The cold starts compiled during start-up and the warm ones did not; my guess
+is that compiling left less memory for the KV cache when vLLM measured it, but I did not test that. What
+the logs do show is that the same flags gave different KV-cache sizes, so compare arms only at the same
+cache state (the headline starts are all warm).
