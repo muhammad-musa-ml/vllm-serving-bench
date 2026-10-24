@@ -12,6 +12,7 @@ x-vllm: &vllm
     - "127.0.0.1:18480:8000"
   volumes:
     - hf-cache:/root/.cache/huggingface
+    - vllm-cache:/root/.cache/vllm
   environment:
     VLLM_NO_USAGE_STATS: "1"
     DO_NOT_TRACK: "1"
@@ -153,4 +154,5 @@ services:
 
 volumes:
   hf-cache:
+  vllm-cache:
   prometheus-data:
