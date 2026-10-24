@@ -1,5 +1,5 @@
 {
-  "image": "vllm/vllm-openai:v0.32.0-cu129",
+  "image": "vllm/vllm-openai:v0.32.0",
   "served_model_name": "bench",
   "server_flags": {
     "max-model-len": "2048",

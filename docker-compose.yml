@@ -6,7 +6,7 @@ name: vllm-serving-bench
 # Host ports used: 18480 (model server), 18490 (Prometheus), 18491 (Grafana).
 
 x-vllm: &vllm
-  image: vllm/vllm-openai:v0.32.0-cu129
+  image: vllm/vllm-openai:v0.32.0
   ipc: host
   ports:
     - "127.0.0.1:18480:8000"
@@ -44,7 +44,6 @@ services:
     <<: *vllm
     profiles: [fp16]
     command:
-      - --model
       - Qwen/Qwen2.5-1.5B-Instruct
       - --revision
       - 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
@@ -68,7 +67,6 @@ services:
     <<: *vllm
     profiles: [awq]
     command:
-      - --model
       - Qwen/Qwen2.5-1.5B-Instruct-AWQ
       - --revision
       - 3ecffa0ceb27851800f45519bab9c457a04405e1
@@ -92,7 +90,6 @@ services:
     <<: *vllm
     profiles: [gptq]
     command:
-      - --model
       - Qwen/Qwen2.5-1.5B-Instruct-GPTQ-Int4
       - --revision
       - 4f5a0e31008e2966e8f787964bcc4e1105e03dc3

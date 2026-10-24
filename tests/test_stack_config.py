@@ -18,7 +18,8 @@ def test_each_arm_has_a_service_whose_command_matches_arms_json():
         svc = COMPOSE["services"][arm["service"]]
         assert svc["profiles"] == [arm["profile"]] == [name]
         cmd = [str(x) for x in svc["command"]]
-        assert flag_value(cmd, "--model") == arm["model"]
+        assert cmd[0] == arm["model"]          # `vllm serve <model>`: the model is positional
+        assert "--model" not in cmd            # the flag is deprecated in this version
         assert flag_value(cmd, "--revision") == arm["revision"]
         assert flag_value(cmd, "--dtype") == arm["dtype"]
         assert flag_value(cmd, "--served-model-name") == ARMS["served_model_name"]
@@ -39,9 +40,8 @@ def test_arms_differ_only_in_model_and_revision():
     commands = {}
     for name, arm in ARMS["arms"].items():
         cmd = [str(x) for x in COMPOSE["services"][arm["service"]]["command"]]
-        for flag in ("--model", "--revision"):
-            i = cmd.index(flag)
-            cmd[i + 1] = "<arm>"
+        cmd[0] = "<arm model>"
+        cmd[cmd.index("--revision") + 1] = "<arm revision>"
         commands[name] = cmd
     assert len({tuple(c) for c in commands.values()}) == 1
 

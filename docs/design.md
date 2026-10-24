@@ -26,7 +26,7 @@ each precision on a small card.
 
 | piece | choice | why |
 |---|---|---|
-| inference server | vLLM `v0.32.0` (`vllm/vllm-openai:v0.32.0-cu129`) in Docker | OpenAI-compatible HTTP API, continuous batching, Prometheus metrics built in, AWQ and GPTQ kernels |
+| inference server | vLLM `v0.32.0` (`vllm/vllm-openai:v0.32.0`, the CUDA 13 build) in Docker | OpenAI-compatible HTTP API, continuous batching, Prometheus metrics built in, AWQ and GPTQ kernels |
 | GPU access | Docker Desktop with the NVIDIA runtime | checked first: `docker run --gpus all` shows the RTX 4050 (`results/environment.json`) |
 | metrics | Prometheus scrapes the server's `/metrics` and a small GPU exporter | the dashboard and the load harness measure the same run from two sides |
 | dashboard | Grafana, provisioned from files | the dashboard is code, so a fresh `docker compose up` shows it |

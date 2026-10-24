@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-IMAGES = ["vllm/vllm-openai:v0.32.0-cu129", "prom/prometheus:v3.5.0", "grafana/grafana:12.0.2"]
+IMAGES = ["vllm/vllm-openai:v0.32.0", "prom/prometheus:v3.5.0", "grafana/grafana:12.0.2"]
 
 
 def run(cmd, timeout=30):
