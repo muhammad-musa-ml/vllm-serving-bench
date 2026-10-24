@@ -215,13 +215,16 @@ async def wait_idle(base_url: str, *, timeout_s: float = 60.0, poll_s: float = 0
 async def run_pass(base_url: str, prompts: list[Prompt], *, model: str, levels: list[int],
                    open_rates: list[float], max_tokens: int, open_duration_s: float,
                    drain_s: float, seed: int, sampler: GpuSampler | None,
-                   max_in_flight: int = 512, cooldown_s: float = 3.0,
+                   max_in_flight: int = 512, cooldown_s: float = 3.0, n_override: int | None = None,
                    log=print) -> tuple[list[dict], list[tuple[dict, list[RequestRecord]]]]:
-    """One full pass: every closed-loop level, then every open-loop rate."""
+    """One full pass: every closed-loop level, then every open-loop rate.
+
+    `n_override` replaces the per-level request count (used for the short warm-up pass).
+    """
     summaries: list[dict] = []
     raw: list[tuple[dict, list[RequestRecord]]] = []
     for c in levels:
-        n = requests_for_level(c)
+        n = n_override if n_override is not None else requests_for_level(c)
         level, recs = await measure_closed(base_url, prompts, concurrency=c, n_requests=n,
                                            max_tokens=max_tokens, model=model, sampler=sampler)
         level["idle_before_next"] = await wait_idle(base_url)
