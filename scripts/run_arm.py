@@ -4,9 +4,14 @@
 
 Steps: stop any other arm's server, start this arm with its Compose profile (plus Prometheus,
 Grafana and the GPU exporter), wait for the server's health check, keep the startup log and a
-/metrics sample, record the GPU memory with the model loaded and idle, run one warm-up pass, then
-`--runs` timed passes (each holding the measurement lock, if one is given) and `--runs` quality
-runs, and finally ask check_stack.py to evaluate the dashboard against Prometheus.
+/metrics sample, record the GPU memory with the model loaded and idle, then `--runs` timed passes
+(each holding the measurement lock, if one is given, and starting with a short uncounted warm-up)
+and `--runs` quality runs, and finally ask check_stack.py to evaluate the dashboard against
+Prometheus.
+
+Between two timed passes the lock is free for `--pause-between-runs` seconds, so other work that
+shares the machine can take its turn. `--first-run N` and `--reuse-server` continue an arm whose
+server is already up and whose first N-1 runs are on disk.
 """
 import argparse
 import datetime
@@ -55,26 +60,7 @@ def gpu_reading():
     return out.stdout.strip()
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("arm", choices=list(ARMS["arms"]))
-    ap.add_argument("--runs", type=int, default=5)
-    ap.add_argument("--results", default="results")
-    ap.add_argument("--lock-file", default=None)
-    ap.add_argument("--lock-owner", default="servebench")
-    ap.add_argument("--open-rates", default="2,4,6,8")
-    ap.add_argument("--open-duration", type=float, default=40.0)
-    ap.add_argument("--skip-quality", action="store_true")
-    ap.add_argument("--keep-up", action="store_true", help="leave the stack running afterwards")
-    args = ap.parse_args()
-
-    arm = ARMS["arms"][args.arm]
-    results = (ROOT / args.results).resolve()
-    server_dir = results / "server" / args.arm
-    server_dir.mkdir(parents=True, exist_ok=True)
-    lock_args = (["--lock-file", args.lock_file, "--lock-owner", args.lock_owner, "--lock-poll", "0.05"]
-                 if args.lock_file else [])
-
+def start_server(args, arm, server_dir):
     stop_all_arms()
     (server_dir / "gpu-before-server.txt").write_text(
         f"# memory.used MiB, memory.total MiB, utilization.gpu % ({utc_now()}, no model server running)\n"
@@ -97,8 +83,41 @@ def main():
         f"{gpu_reading()}\n", encoding="utf-8", newline="\n")
     print(f"{args.arm}: healthy after {startup_s:.0f} s", flush=True)
 
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("arm", choices=list(ARMS["arms"]))
+    ap.add_argument("--runs", type=int, default=5)
+    ap.add_argument("--first-run", type=int, default=1, help="continue from this run number")
+    ap.add_argument("--reuse-server", action="store_true", help="the arm's server is already up")
+    ap.add_argument("--pause-between-runs", type=float, default=20.0,
+                    help="seconds without the lock between two timed passes")
+    ap.add_argument("--results", default="results")
+    ap.add_argument("--lock-file", default=None)
+    ap.add_argument("--lock-owner", default="servebench")
+    ap.add_argument("--open-rates", default="2,4,6,8")
+    ap.add_argument("--open-duration", type=float, default=40.0)
+    ap.add_argument("--skip-quality", action="store_true")
+    ap.add_argument("--keep-up", action="store_true", help="leave the stack running afterwards")
+    args = ap.parse_args()
+
+    arm = ARMS["arms"][args.arm]
+    results = (ROOT / args.results).resolve()
+    server_dir = results / "server" / args.arm
+    server_dir.mkdir(parents=True, exist_ok=True)
+    lock_args = (["--lock-file", args.lock_file, "--lock-owner", args.lock_owner, "--lock-poll", "0.05"]
+                 if args.lock_file else [])
+
+    if args.reuse_server:
+        fetch("/health")          # raises if the server is not answering
+        print(f"{args.arm}: reusing the running server", flush=True)
+    else:
+        start_server(args, arm, server_dir)
+
     # every timed pass starts with a short uncounted warm-up inside the same lock hold
-    for n in range(1, args.runs + 1):
+    for n in range(args.first_run, args.runs + 1):
+        if n > args.first_run:
+            time.sleep(args.pause_between_runs)
         servebench("bench", "--url", URL, "--arm", args.arm, "--run", str(n),
                    "--out", str(results / "runs" / args.arm), "--open-rates", args.open_rates,
                    "--open-duration", str(args.open_duration), "--warmup-first", *lock_args)
