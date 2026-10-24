@@ -62,9 +62,14 @@ an accepted licence on an account, and I do not use accounts for this).
 
 Server flags are the same for every arm: `--max-model-len 2048`,
 `--gpu-memory-utilization 0.80`, `--max-num-seqs 32`,
-`--no-enable-prefix-caching`. Prefix caching is off because the five runs
-reuse the same prompts; with it on, every run after the first would skip the
-prompt work and the runs would stop being repeats of each other.
+`--no-enable-prefix-caching`, `--generation-config vllm`. Prefix caching is
+off because the five runs reuse the same prompts; with it on, every run after
+the first would skip the prompt work and the runs would stop being repeats of
+each other. `--generation-config vllm` stops the server from applying the
+model repository's own sampling defaults (a repetition penalty of 1.1, top-k
+20, top-p 0.8) to requests that do not set them; the first start of the server
+printed a warning that it was doing so. With the flag, "temperature 0" is plain
+greedy decoding in the quality runs and the load runs add no penalty step.
 
 ## The load harness
 

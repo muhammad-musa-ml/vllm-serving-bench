@@ -5,7 +5,8 @@
     "max-model-len": "2048",
     "gpu-memory-utilization": "0.80",
     "max-num-seqs": "32",
-    "no-enable-prefix-caching": true
+    "no-enable-prefix-caching": true,
+    "generation-config": "vllm"
   },
   "arms": {
     "fp16": {

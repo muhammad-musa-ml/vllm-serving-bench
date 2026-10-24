@@ -80,6 +80,8 @@ def main():
     startup_s = time.time() - t_up
     log = compose("logs", "--no-color", arm["service"], capture=True)
     (server_dir / "startup.log").write_text(log.stdout + log.stderr, encoding="utf-8", newline="\n")
+    subprocess.run([sys.executable, str(ROOT / "scripts" / "extract_server_facts.py"), args.arm,
+                    "--results", args.results], check=False, cwd=ROOT, capture_output=True)
     (server_dir / "model.json").write_text(json.dumps({
         "arm": args.arm, "model": arm["model"], "revision": arm["revision"], "dtype": arm["dtype"],
         "weights": arm["weights"], "license": arm["license"], "image": ARMS["image"],

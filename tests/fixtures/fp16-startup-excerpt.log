@@ -1,0 +1,9 @@
+vllm-fp16-1  | (APIServer pid=1) WARNING 10-24 08:00:02 [model.py:2498] Casting torch.bfloat16 to torch.float16.
+vllm-fp16-1  | (EngineCore pid=98) INFO 10-24 08:00:16 [core.py:133] Initializing a V1 LLM engine (v0.32.0) with config: model='Qwen/Qwen2.5-1.5B-Instruct', speculative_config=None, tokenizer='Qwen/Qwen2.5-1.5B-Instruct', skip_tokenizer_init=False, tokenizer_mode=auto, revision=989aa7980e4cf806f80c7fef2b1adb7bc71aa306, tokenizer
+vllm-fp16-1  | (EngineCore pid=98) WARNING 10-24 08:00:20 [buffer_utils.py:47] Pinned memory is not available on this platform; falling back to device memory for UVA buffers.
+vllm-fp16-1  | (EngineCore pid=98) INFO 10-24 08:00:24 [cuda.py:506] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+vllm-fp16-1  | (EngineCore pid=98) INFO 10-24 08:00:35 [model_runner.py:424] Model loading took 2.98 GiB memory and 14.488121 seconds
+vllm-fp16-1  | (EngineCore pid=98) INFO 10-24 08:01:09 [gpu_worker.py:759] Available KV cache memory: 1.13 GiB
+vllm-fp16-1  | (EngineCore pid=98) INFO 10-24 08:01:09 [kv_cache_utils.py:2327] GPU KV cache size: 42,432 tokens, Maximum concurrency for 2,048 tokens per request: 20.72x
+vllm-fp16-1  | (EngineCore pid=98) INFO 10-24 08:01:15 [gpu_worker.py:1034] Free memory on device (4.95/6.0 GiB) on startup. Desired GPU memory utilization is (0.8, 4.8 GiB). Actual usage is 3.11 GiB for consumed memory (weights + non-torch), 0.56 GiB for peak activation, and 0.06 GiB for CUDAGraph memory. Replace gpu_memory_uti
+vllm-fp16-1  | (EngineCore pid=98) INFO 10-24 08:01:17 [core.py:395] init engine (profile, create kv cache, warmup model) took 42.17 s (compilation: 26.87 s)
