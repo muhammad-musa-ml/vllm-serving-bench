@@ -106,14 +106,9 @@ def main():
     results = (ROOT / args.results).resolve()
     server_dir = results / "server" / args.arm
     server_dir.mkdir(parents=True, exist_ok=True)
-    if args.reuse_server:
-        fetch("/health")          # raises if the server is not answering
-        print(f"{args.arm}: reusing the running server", flush=True)
-    else:
-        start_server(args, arm, server_dir)
-
-    # The arm's timed passes are one batch: the lock is taken once and held across them (the other users of
-    # the machine hold it the same way, a batch at a time). Every pass starts with a short uncounted warm-up.
+    # The whole arm is one batch: the lock is taken first and held through the server start (a CPU-heavy
+    # compile), the timed passes, the quality runs and the shutdown; the other users of the machine hold it
+    # the same way, a batch at a time. Every timed pass starts with a short uncounted warm-up.
     lock = None
     batch_args = []
     if args.lock_file:
@@ -123,28 +118,32 @@ def main():
         print(f"{args.arm}: lock taken after {lock.waited_s:.0f} s at {utc_now()}", flush=True)
         batch_args = ["--batch-lock-owner", args.lock_owner]
     try:
+        if args.reuse_server:
+            fetch("/health")          # raises if the server is not answering
+            print(f"{args.arm}: reusing the running server", flush=True)
+        else:
+            start_server(args, arm, server_dir)
         for n in range(args.first_run, args.runs + 1):
             if n > args.first_run:
                 time.sleep(args.pause_between_runs)
             servebench("bench", "--url", URL, "--arm", args.arm, "--run", str(n),
                        "--out", str(results / "runs" / args.arm), "--open-rates", args.open_rates,
                        "--open-duration", str(args.open_duration), "--warmup-first", *batch_args)
+        (server_dir / "metrics-sample.txt").write_text(fetch("/metrics"), encoding="utf-8", newline="\n")
+        if not args.skip_quality:
+            for n in range(1, args.runs + 1):
+                servebench("quality", "--url", URL, "--arm", args.arm, "--run", str(n),
+                           "--out", str(results / "quality" / args.arm))
+        check = ROOT / "scripts" / "check_stack.py"
+        if check.exists():
+            subprocess.run([sys.executable, str(check), "--arm", args.arm,
+                            "--out", str(results / "evidence")], check=False, cwd=ROOT)
+        if not args.keep_up:
+            stop_all_arms()
     finally:
         if lock:
             lock.release()
             print(f"{args.arm}: lock released at {utc_now()}", flush=True)
-    (server_dir / "metrics-sample.txt").write_text(fetch("/metrics"), encoding="utf-8", newline="\n")
-    if not args.skip_quality:
-        for n in range(1, args.runs + 1):
-            servebench("quality", "--url", URL, "--arm", args.arm, "--run", str(n),
-                       "--out", str(results / "quality" / args.arm))
-
-    check = ROOT / "scripts" / "check_stack.py"
-    if check.exists():
-        subprocess.run([sys.executable, str(check), "--arm", args.arm,
-                        "--out", str(results / "evidence")], check=False, cwd=ROOT)
-    if not args.keep_up:
-        stop_all_arms()
     print(f"{args.arm}: done {utc_now()}", flush=True)
 
 
