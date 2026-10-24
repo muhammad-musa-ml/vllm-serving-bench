@@ -1,0 +1,52 @@
+vllm-fp16-1  | Traceback (most recent call last):
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/torch/_ops.py", line 1516, in load_library
+vllm-fp16-1  |     ctypes.CDLL(path)
+vllm-fp16-1  |   File "/usr/lib/python3.12/ctypes/__init__.py", line 379, in __init__
+vllm-fp16-1  |     self._handle = _dlopen(self._name, mode)
+vllm-fp16-1  |                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+vllm-fp16-1  | OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+vllm-fp16-1  | 
+vllm-fp16-1  | The above exception was the direct cause of the following exception:
+vllm-fp16-1  | 
+vllm-fp16-1  | Traceback (most recent call last):
+vllm-fp16-1  |   File "/usr/local/bin/vllm", line 10, in <module>
+vllm-fp16-1  |     sys.exit(main())
+vllm-fp16-1  |              ^^^^^^
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/vllm/entrypoints/cli/main.py", line 43, in main
+vllm-fp16-1  |     import vllm.entrypoints.cli.benchmark.main
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/vllm/entrypoints/cli/benchmark/main.py", line 12, in <module>
+vllm-fp16-1  |     from vllm.entrypoints.serve.utils.api_utils import VLLM_SUBCMD_PARSER_EPILOG
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/vllm/entrypoints/serve/utils/api_utils.py", line 19, in <module>
+vllm-fp16-1  |     from vllm.engine.arg_utils import EngineArgs
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/vllm/engine/arg_utils.py", line 136, in <module>
+vllm-fp16-1  |     from vllm.v1.sample.logits_processor import LogitsProcessor
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/vllm/v1/sample/logits_processor/__init__.py", line 16, in <module>
+vllm-fp16-1  |     from vllm.sampling_params import SamplingParams
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/vllm/sampling_params.py", line 25, in <module>
+vllm-fp16-1  |     from vllm.v1.serial_utils import PydanticMsgspecMixin
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/vllm/v1/serial_utils.py", line 25, in <module>
+vllm-fp16-1  |     from vllm.multimodal.inputs import (
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/vllm/multimodal/__init__.py", line 3, in <module>
+vllm-fp16-1  |     from .hasher import MultiModalHasher
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/vllm/multimodal/hasher.py", line 17, in <module>
+vllm-fp16-1  |     from .media import MediaWithBytes
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/vllm/multimodal/media/__init__.py", line 3, in <module>
+vllm-fp16-1  |     from .audio import AudioEmbeddingMediaIO, AudioMediaIO
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/vllm/multimodal/media/audio.py", line 41, in <module>
+vllm-fp16-1  |     from torchcodec.decoders import AudioDecoder
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/torchcodec/__init__.py", line 13, in <module>
+vllm-fp16-1  |     from . import decoders, encoders, samplers, transforms  # noqa
+vllm-fp16-1  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/torchcodec/decoders/__init__.py", line 7, in <module>
+vllm-fp16-1  |     from .._core import AudioStreamMetadata, VideoStreamMetadata
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/torchcodec/_core/__init__.py", line 8, in <module>
+vllm-fp16-1  |     from ._metadata import (
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/torchcodec/_core/_metadata.py", line 16, in <module>
+vllm-fp16-1  |     from torchcodec._core.ops import (
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/torchcodec/_core/ops.py", line 35, in <module>
+vllm-fp16-1  |     load_image_library()
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/torchcodec/_internally_replaced_utils.py", line 71, in load_image_library
+vllm-fp16-1  |     torch.ops.load_library(image_library_path)
+vllm-fp16-1  |   File "/usr/local/lib/python3.12/dist-packages/torch/_ops.py", line 1518, in load_library
+vllm-fp16-1  |     raise OSError(f"Could not load this library: {path}") from e
+vllm-fp16-1  | OSError: Could not load this library: /usr/local/lib/python3.12/dist-packages/torchcodec/libtorchcodec_image.so
