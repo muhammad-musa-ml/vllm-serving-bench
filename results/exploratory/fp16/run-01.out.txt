@@ -1,0 +1,16 @@
+waiting for the measurement lock measure.lock ...
+lock taken after 707.0 s
+closed c=1: 55.0 tok/s, p50 e2e 2.31 s, 0 failed
+closed c=2: 106.0 tok/s, p50 e2e 2.38 s, 0 failed
+closed c=4: 202.4 tok/s, p50 e2e 2.52 s, 0 failed
+closed c=8: 367.5 tok/s, p50 e2e 2.74 s, 0 failed
+closed c=16: 628.7 tok/s, p50 e2e 3.25 s, 0 failed
+open rate=1.0: 1.25 req/s completed against 1.23 offered, 0 unfinished
+open rate=2.0: 1.96 req/s completed against 2.10 offered, 0 unfinished
+open rate=3.0: 3.41 req/s completed against 3.57 offered, 0 unfinished
+open rate=4.0: 3.90 req/s completed against 4.10 offered, 0 unfinished
+open rate=5.0: 4.51 req/s completed against 4.90 offered, 0 unfinished
+open rate=6.0: 5.16 req/s completed against 5.53 offered, 0 unfinished
+open rate=8.0: 6.74 req/s completed against 7.87 offered, 0 unfinished
+wrote results\exploratory\fp16\run-01.json
+PASS EXIT=0

@@ -1,0 +1,2 @@
+closed c=4: 200.2 tok/s, p50 e2e 2.52 s, 0 failed
+wrote results\exploratory\smoke\warmup.json

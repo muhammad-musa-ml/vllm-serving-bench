@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "arm": "fp16",
+  "name": "run-02",
+  "started_utc": "2026-10-24T11:19:44Z",
+  "finished_utc": "2026-10-24T11:19:56Z",
+  "harness": {
+    "version": "0.1.0",
+    "commit": "e88b8cd1b6594be39438fd5d11f0a988642f92c7",
+    "dirty": false
+  },
+  "settings": {
+    "sets": [
+      "mmlu",
+      "synthetic"
+    ],
+    "concurrency": 8,
+    "temperature": 0.0,
+    "n_tasks": 405,
+    "model": "bench"
+  },
+  "summary": {
+    "all": {
+      "n": 405,
+      "correct": 282,
+      "accuracy": 0.6962962962962963,
+      "ci95": [
+        0.6498377418711018,
+        0.7390659313363214
+      ],
+      "request_errors": 0
+    },
+    "by_set": {
+      "mmlu-subset": {
+        "n": 285,
+        "correct": 167,
+        "accuracy": 0.5859649122807018,
+        "ci95": [
+          0.5280058545601293,
+          0.6416372993346006
+        ],
+        "request_errors": 0
+      },
+      "synthetic-tasks": {
+        "n": 120,
+        "correct": 115,
+        "accuracy": 0.9583333333333334,
+        "ci95": [
+          0.9061578707045692,
+          0.9820735474941622
+        ],
+        "request_errors": 0
+      }
+    },
+    "by_kind": {
+      "mmlu-subset/mcq": {
+        "n": 285,
+        "correct": 167,
+        "accuracy": 0.5859649122807018,
+        "ci95": [
+          0.5280058545601293,
+          0.6416372993346006
+        ],
+        "request_errors": 0
+      },
+      "synthetic-tasks/arith": {
+        "n": 40,
+        "correct": 36,
+        "accuracy": 0.9,
+        "ci95": [
+          0.7694792561952611,
+          0.9604211124044252
+        ],
+        "request_errors": 0
+      },
+      "synthetic-tasks/extract": {
+        "n": 40,
+        "correct": 40,
+        "accuracy": 1.0,
+        "ci95": [
+          0.9123754607496077,
+          1.0
+        ],
+        "request_errors": 0
+      },
+      "synthetic-tasks/format-exact": {
+        "n": 14,
+        "correct": 13,
+        "accuracy": 0.9285714285714286,
+        "ci95": [
+          0.6853073044604219,
+          0.9872781138877085
+        ],
+        "request_errors": 0
+      },
+      "synthetic-tasks/format-json": {
+        "n": 13,
+        "correct": 13,
+        "accuracy": 1.0,
+        "ci95": [
+          0.7718981569447083,
+          1.0
+        ],
+        "request_errors": 0
+      },
+      "synthetic-tasks/format-lines": {
+        "n": 13,
+        "correct": 13,
+        "accuracy": 1.0,
+        "ci95": [
+          0.7718981569447083,
+          1.0
+        ],
+        "request_errors": 0
+      }
+    }
+  }
+}

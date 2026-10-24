@@ -1,0 +1,55 @@
+{
+  "recorded_utc": "2026-10-24T07:56:14Z",
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "logical_cpus": 24,
+    "power": {
+      "source": "AC",
+      "battery_percent": 100,
+      "active_power_scheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)"
+    }
+  },
+  "gpu": {
+    "available": true,
+    "name": "NVIDIA GeForce RTX 4050 Laptop GPU",
+    "memory_total_mib": "6141",
+    "driver_version": "592.82",
+    "pci_bus_id": "00000000:01:00.0",
+    "power_limit_w": "[N/A]",
+    "max_sm_clock_mhz": "3105",
+    "max_mem_clock_mhz": "8001",
+    "cuda_version_reported_by_driver": "13.1"
+  },
+  "docker": {
+    "server_version": "28.4.0",
+    "compose_version": "2.39.2-desktop.1",
+    "ncpu": 24,
+    "mem_total_bytes": 15550517248,
+    "operating_system": "Docker Desktop",
+    "images": {
+      "vllm/vllm-openai:v0.32.0": {
+        "repo_digest": "vllm/vllm-openai@sha256:befccf0e7e4089aa23926bb6f887a85c0d46c2a99e6de5c5ffdf5cb7957c5b34",
+        "image_id": "sha256:befccf0e7e4089aa23926bb6f887a85c0d46c2a99e6de5c5ffdf5cb7957c5b34",
+        "size_bytes": 9205781514
+      },
+      "prom/prometheus:v3.5.0": {
+        "repo_digest": "prom/prometheus@sha256:63805ebb8d2b3920190daf1cb14a60871b16fd38bed42b857a3182bc621f4996",
+        "image_id": "sha256:63805ebb8d2b3920190daf1cb14a60871b16fd38bed42b857a3182bc621f4996",
+        "size_bytes": 123797512
+      },
+      "grafana/grafana:12.0.2": {
+        "repo_digest": "grafana/grafana@sha256:b5b59bfc7561634c2d7b136c4543d702ebcc94a3da477f21ff26f89ffd4214fa",
+        "image_id": "sha256:b5b59bfc7561634c2d7b136c4543d702ebcc94a3da477f21ff26f89ffd4214fa",
+        "size_bytes": 186751946
+      }
+    }
+  },
+  "python": {
+    "version": "3.13.5",
+    "aiohttp": "3.14.5"
+  },
+  "git": {
+    "git_version": "git version 2.51.0.windows.1"
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "schema": 1,
+  "arm": "awq",
+  "name": "warmup",
+  "started_utc": "2026-10-24T08:13:46Z",
+  "finished_utc": "2026-10-24T08:13:57Z",
+  "harness": {
+    "version": "0.1.0",
+    "commit": "f13ebdcb1a86b78a9ef563794a584fb0ecc1a6d4",
+    "dirty": false
+  },
+  "settings": {
+    "levels": [
+      4
+    ],
+    "open_rates": [],
+    "open_duration_s": 40.0,
+    "drain_s": 60.0,
+    "max_tokens": 128,
+    "fixed_length": true,
+    "seed": 20261024,
+    "prompt_set": {
+      "count": 256,
+      "seed": 20261024,
+      "mean_words": 262.99609375
+    },
+    "model": "bench",
+    "gpu_interval_ms": 250
+  },
+  "server": {
+    "version": {
+      "version": "0.32.0"
+    },
+    "models": {
+      "object": "list",
+      "data": [
+        {
+          "id": "bench",
+          "object": "model",
+          "created": 1792829627,
+          "owned_by": "vllm",
+          "root": "Qwen/Qwen2.5-1.5B-Instruct-AWQ",
+          "parent": null,
+          "max_model_len": 2048,
+          "permission": [
+            {
+              "id": "modelperm-bd1626b8d3493e8b",
+              "object": "model_permission",
+              "created": 1792829627,
+              "allow_create_engine": false,
+              "allow_sampling": true,
+              "allow_logprobs": true,
+              "allow_search_indices": false,
+              "allow_view": true,
+              "allow_fine_tuning": false,
+              "organization": "*",
+              "group": null,
+              "is_blocking": false
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gpu_before_pass": {
+    "mem_mib": 5129.0,
+    "util_pct": 0.0,
+    "temp_c": 61.0,
+    "sm_mhz": 2550.0,
+    "power_w": 24.55
+  },
+  "lock": null,
+  "machine": {
+    "python": "3.13.5",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "aiohttp": "3.14.5"
+  },
+  "levels": [
+    {
+      "mode": "closed",
+      "concurrency": 4,
+      "wall_s": 7.825273699942045,
+      "req_s": 3.066985375882475,
+      "out_tok_s": 392.5741281129568,
+      "n_requests": 24,
+      "n_ok": 24,
+      "n_failed": 0,
+      "errors": {},
+      "ttft_s": {
+        "n": 24,
+        "mean": 0.24903218749386724,
+        "min": 0.100048299995251,
+        "max": 0.4297253000549972,
+        "p50": 0.239353500015568,
+        "p95": 0.4293283399543725,
+        "p99": 0.4296413960319478
+      },
+      "e2e_s": {
+        "n": 24,
+        "mean": 1.3032668666613365,
+        "min": 1.2010586999822408,
+        "max": 1.468710899935104,
+        "p50": 1.256533700041473,
+        "p95": 1.467741925030714,
+        "p99": 1.4685346279584337
+      },
+      "tpot_s": {
+        "n": 24,
+        "mean": 0.008301060465885586,
+        "min": 0.007700452755212667,
+        "max": 0.009932948031653394,
+        "p50": 0.008008975196468432,
+        "p95": 0.009402855000170827,
+        "p99": 0.009811260826944366
+      },
+      "itl_max_s": {
+        "n": 24,
+        "mean": 0.038367770830518566,
+        "min": 0.009500199928879738,
+        "max": 0.23140380007680506,
+        "p50": 0.016153850010596216,
+        "p95": 0.12211847502621824,
+        "p99": 0.20685831506852986
+      },
+      "prompt_tokens_mean": 328.75,
+      "completion_tokens_mean": 128.0,
+      "short_outputs": 0,
+      "gpu": {
+        "n": 30,
+        "mem_mib": {
+          "mean": 5129.0,
+          "min": 5129.0,
+          "max": 5129.0
+        },
+        "util_pct": {
+          "mean": 84.5,
+          "min": 0.0,
+          "max": 100.0
+        },
+        "temp_c": {
+          "mean": 66.26666666666667,
+          "min": 60.0,
+          "max": 71.0
+        },
+        "sm_mhz": {
+          "mean": 2489.0,
+          "min": 2130.0,
+          "max": 2550.0
+        },
+        "power_w": {
+          "mean": 51.022000000000006,
+          "min": 17.47,
+          "max": 59.93
+        }
+      },
+      "idle_before_next": true
+    }
+  ]
+}

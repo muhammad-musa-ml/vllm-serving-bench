@@ -1,0 +1,2 @@
+closed c=4: 415.7 tok/s, p50 e2e 1.21 s, 0 failed
+wrote results\exploratory\smoke-gptq\warmup.json

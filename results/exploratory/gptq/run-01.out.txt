@@ -1,0 +1,15 @@
+waiting for the measurement lock measure.lock ...
+lock taken after 547.1 s
+closed c=1: 124.0 tok/s, p50 e2e 1.02 s, 0 failed
+closed c=2: 225.8 tok/s, p50 e2e 1.11 s, 0 failed
+closed c=4: 398.9 tok/s, p50 e2e 1.28 s, 0 failed
+closed c=8: 700.3 tok/s, p50 e2e 1.41 s, 0 failed
+closed c=16: 1044.0 tok/s, p50 e2e 1.95 s, 0 failed
+open rate=2.0: 2.03 req/s completed against 2.10 offered, 0 unfinished
+open rate=4.0: 4.08 req/s completed against 4.10 offered, 0 unfinished
+open rate=6.0: 5.43 req/s completed against 5.53 offered, 0 unfinished
+open rate=8.0: 7.57 req/s completed against 7.87 offered, 0 unfinished
+open rate=10.0: 9.18 req/s completed against 9.97 offered, 0 unfinished
+open rate=12.0: 10.19 req/s completed against 12.17 offered, 0 unfinished
+wrote results\exploratory\gptq\run-01.json
+PASS EXIT=0

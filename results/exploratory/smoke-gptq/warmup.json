@@ -1,0 +1,159 @@
+{
+  "schema": 1,
+  "arm": "gptq",
+  "name": "warmup",
+  "started_utc": "2026-10-24T08:17:58Z",
+  "finished_utc": "2026-10-24T08:18:09Z",
+  "harness": {
+    "version": "0.1.0",
+    "commit": "f13ebdcb1a86b78a9ef563794a584fb0ecc1a6d4",
+    "dirty": false
+  },
+  "settings": {
+    "levels": [
+      4
+    ],
+    "open_rates": [],
+    "open_duration_s": 40.0,
+    "drain_s": 60.0,
+    "max_tokens": 128,
+    "fixed_length": true,
+    "seed": 20261024,
+    "prompt_set": {
+      "count": 256,
+      "seed": 20261024,
+      "mean_words": 262.99609375
+    },
+    "model": "bench",
+    "gpu_interval_ms": 250
+  },
+  "server": {
+    "version": {
+      "version": "0.32.0"
+    },
+    "models": {
+      "object": "list",
+      "data": [
+        {
+          "id": "bench",
+          "object": "model",
+          "created": 1792829878,
+          "owned_by": "vllm",
+          "root": "Qwen/Qwen2.5-1.5B-Instruct-GPTQ-Int4",
+          "parent": null,
+          "max_model_len": 2048,
+          "permission": [
+            {
+              "id": "modelperm-b3856c2d032e9cff",
+              "object": "model_permission",
+              "created": 1792829878,
+              "allow_create_engine": false,
+              "allow_sampling": true,
+              "allow_logprobs": true,
+              "allow_search_indices": false,
+              "allow_view": true,
+              "allow_fine_tuning": false,
+              "organization": "*",
+              "group": null,
+              "is_blocking": false
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gpu_before_pass": {
+    "mem_mib": 5155.0,
+    "util_pct": 0.0,
+    "temp_c": 60.0,
+    "sm_mhz": 2565.0,
+    "power_w": 24.03
+  },
+  "lock": null,
+  "machine": {
+    "python": "3.13.5",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "aiohttp": "3.14.5"
+  },
+  "levels": [
+    {
+      "mode": "closed",
+      "concurrency": 4,
+      "wall_s": 7.390329999965616,
+      "req_s": 3.2474869187318647,
+      "out_tok_s": 415.6783255976787,
+      "n_requests": 24,
+      "n_ok": 24,
+      "n_failed": 0,
+      "errors": {},
+      "ttft_s": {
+        "n": 24,
+        "mean": 0.2050210083349763,
+        "min": 0.10210020001977682,
+        "max": 0.24401399993803352,
+        "p50": 0.2175825000158511,
+        "p95": 0.2429274299473036,
+        "p99": 0.24379602893837726
+      },
+      "e2e_s": {
+        "n": 24,
+        "mean": 1.2303558749893757,
+        "min": 1.1929492000490427,
+        "max": 1.3029494000365958,
+        "p50": 1.2126979000167921,
+        "p95": 1.2998595100129022,
+        "p99": 1.3022419890318997
+      },
+      "tpot_s": {
+        "n": 24,
+        "mean": 0.008073502887042516,
+        "min": 0.007649696850049214,
+        "max": 0.008897863779451669,
+        "p50": 0.007838629133904016,
+        "p95": 0.008624155983726648,
+        "p99": 0.008836323204514475
+      },
+      "itl_max_s": {
+        "n": 24,
+        "mean": 0.032482220834936015,
+        "min": 0.009976699948310852,
+        "max": 0.11464639997575432,
+        "p50": 0.01685245003318414,
+        "p95": 0.11292015501530842,
+        "p99": 0.1143631549878046
+      },
+      "prompt_tokens_mean": 328.75,
+      "completion_tokens_mean": 128.0,
+      "short_outputs": 0,
+      "gpu": {
+        "n": 29,
+        "mem_mib": {
+          "mean": 5155.0,
+          "min": 5155.0,
+          "max": 5155.0
+        },
+        "util_pct": {
+          "mean": 90.37931034482759,
+          "min": 0.0,
+          "max": 100.0
+        },
+        "temp_c": {
+          "mean": 66.48275862068965,
+          "min": 60.0,
+          "max": 68.0
+        },
+        "sm_mhz": {
+          "mean": 2517.4137931034484,
+          "min": 2415.0,
+          "max": 2565.0
+        },
+        "power_w": {
+          "mean": 52.993793103448276,
+          "min": 24.03,
+          "max": 59.4
+        }
+      },
+      "idle_before_next": true
+    }
+  ]
+}

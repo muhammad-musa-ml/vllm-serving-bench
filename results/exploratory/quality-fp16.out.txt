@@ -1,0 +1,1 @@
+quality fp16 run 1: 282/405 (0.696), 0 request errors
