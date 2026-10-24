@@ -1,0 +1,2 @@
+# memory.used MiB, memory.total MiB, utilization.gpu % (2026-10-24T13:00:44Z, model loaded, idle)
+5269, 6141, 0

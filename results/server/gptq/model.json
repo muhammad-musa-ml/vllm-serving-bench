@@ -1,0 +1,18 @@
+{
+  "arm": "gptq",
+  "model": "Qwen/Qwen2.5-1.5B-Instruct-GPTQ-Int4",
+  "revision": "4f5a0e31008e2966e8f787964bcc4e1105e03dc3",
+  "dtype": "float16",
+  "weights": "4-bit GPTQ",
+  "license": "apache-2.0",
+  "image": "vllm/vllm-openai:v0.32.0",
+  "server_flags": {
+    "max-model-len": "2048",
+    "gpu-memory-utilization": "0.80",
+    "max-num-seqs": "32",
+    "no-enable-prefix-caching": true,
+    "generation-config": "vllm"
+  },
+  "start_to_healthy_s": 85.0,
+  "started_utc": "2026-10-24T13:00:44Z"
+}

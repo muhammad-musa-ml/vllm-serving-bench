@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "arm": "gptq",
+  "name": "run-04",
+  "started_utc": "2026-10-24T13:36:34Z",
+  "finished_utc": "2026-10-24T13:36:44Z",
+  "harness": {
+    "version": "0.1.0",
+    "commit": "d7a626d72056bf1dce045cd0d6f9c34912b0a82b",
+    "dirty": false
+  },
+  "settings": {
+    "sets": [
+      "mmlu",
+      "synthetic"
+    ],
+    "concurrency": 8,
+    "temperature": 0.0,
+    "n_tasks": 405,
+    "model": "bench"
+  },
+  "summary": {
+    "all": {
+      "n": 405,
+      "correct": 266,
+      "accuracy": 0.6567901234567901,
+      "ci95": [
+        0.6092706403526568,
+        0.7013631112029578
+      ],
+      "request_errors": 0
+    },
+    "by_set": {
+      "mmlu-subset": {
+        "n": 285,
+        "correct": 164,
+        "accuracy": 0.5754385964912281,
+        "ci95": [
+          0.5174236634006796,
+          0.6314468594048998
+        ],
+        "request_errors": 0
+      },
+      "synthetic-tasks": {
+        "n": 120,
+        "correct": 102,
+        "accuracy": 0.85,
+        "ci95": [
+          0.7753231505975375,
+          0.9029626596633118
+        ],
+        "request_errors": 0
+      }
+    },
+    "by_kind": {
+      "mmlu-subset/mcq": {
+        "n": 285,
+        "correct": 164,
+        "accuracy": 0.5754385964912281,
+        "ci95": [
+          0.5174236634006796,
+          0.6314468594048998
+        ],
+        "request_errors": 0
+      },
+      "synthetic-tasks/arith": {
+        "n": 40,
+        "correct": 34,
+        "accuracy": 0.85,
+        "ci95": [
+          0.7092737396097997,
+          0.9293890829149256
+        ],
+        "request_errors": 0
+      },
+      "synthetic-tasks/extract": {
+        "n": 40,
+        "correct": 35,
+        "accuracy": 0.875,
+        "ci95": [
+          0.7388757932976187,
+          0.9454058022645873
+        ],
+        "request_errors": 0
+      },
+      "synthetic-tasks/format-exact": {
+        "n": 14,
+        "correct": 10,
+        "accuracy": 0.7142857142857143,
+        "ci95": [
+          0.4535045882751561,
+          0.882788120898909
+        ],
+        "request_errors": 0
+      },
+      "synthetic-tasks/format-json": {
+        "n": 13,
+        "correct": 13,
+        "accuracy": 1.0,
+        "ci95": [
+          0.7718981569447083,
+          1.0
+        ],
+        "request_errors": 0
+      },
+      "synthetic-tasks/format-lines": {
+        "n": 13,
+        "correct": 10,
+        "accuracy": 0.7692307692307693,
+        "ci95": [
+          0.49743126004873084,
+          0.918206209075343
+        ],
+        "request_errors": 0
+      }
+    }
+  }
+}
