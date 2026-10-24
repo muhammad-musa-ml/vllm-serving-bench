@@ -113,10 +113,12 @@ def render(summary, results):
     for a in arms:
         out += [f"**{a}**", "",
                 "| offered req/s | arrivals per second (realized) | completed req/s | completed % | "
-                "e2e p50 s | e2e p95 s | e2e p99 s | unfinished |", "|---|---|---|---|---|---|---|---|"]
+                "TTFT p50 ms | e2e p50 s | e2e p95 s | e2e p99 s | unfinished |",
+                "|---|---|---|---|---|---|---|---|---|"]
         for r, m in summary["arms"][a]["open"].items():
             out.append(f"| {float(r):g} | {cell(m['realized_rate'], 2)} | {cell(m['req_s_overall'], 2)} | "
-                       f"{cell(m['completion_ratio'], 0, pct)} | {cell(m['e2e_p50_s'], 2)} | "
+                       f"{cell(m['completion_ratio'], 0, pct)} | {cell(m['ttft_p50_s'], 0, ms)} | "
+                       f"{cell(m['e2e_p50_s'], 2)} | "
                        f"{cell(m['e2e_p95_s'], 2)} | {cell(m['e2e_p99_s'], 2)} | "
                        f"{cell(m['n_unfinished'], 0)} |")
         out.append("")
