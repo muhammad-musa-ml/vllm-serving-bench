@@ -79,5 +79,8 @@ def test_saturation_text():
     assert "not reached" in render.sat_closed({"concurrency": None, "peak_tok_s": 600.0})
     assert render.sat_closed({"concurrency": 8, "tok_s_at_knee": 700.0, "tok_s_at_next": 720.0}).startswith(
         "8 workers")
-    assert render.sat_open({"rate": 8.0}) == "8 req/s offered"
+    assert render.sat_open({"rate": 8.0}) == "requests start to wait at 8 req/s offered"
     assert render.sat_open({"rate": None}).startswith("not reached")
+    assert render.peak_open({"peak_req_s": 7.3, "peak_out_tok_s": 934.0, "peak_at_offered": 12.0}) == (
+        "7.30 req/s (934 tok/s), at 12 offered")
+    assert render.peak_open({}) == "-"

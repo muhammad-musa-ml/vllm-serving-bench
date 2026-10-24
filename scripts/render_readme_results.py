@@ -41,8 +41,19 @@ def sat_closed(sat):
             f"{sat['tok_s_at_next']:.0f} at the next level)")
 
 
-def sat_open(sat):
+def wait_rate(sat):
     return f"{sat['rate']:g} req/s offered" if sat.get("rate") else "not reached in the tested rates"
+
+
+def sat_open(sat):
+    return f"requests start to wait at {wait_rate(sat)}" if sat.get("rate") else wait_rate(sat)
+
+
+def peak_open(sat):
+    if not sat.get("peak_req_s"):
+        return "-"
+    return (f"{sat['peak_req_s']:.2f} req/s ({sat['peak_out_tok_s']:.0f} tok/s), "
+            f"at {sat['peak_at_offered']:g} offered")
 
 
 def render(summary, results):
@@ -73,7 +84,10 @@ def render(summary, results):
     row("time to first token p50, 16 workers, ms",
         lambda a: cell(dig(summary, "arms", a, "closed", "16", "ttft_p50_s"), 0, ms))
     row("closed-loop saturation", lambda a: sat_closed(summary["arms"][a]["saturation"]["closed"]))
-    row("open-loop saturation", lambda a: sat_open(summary["arms"][a]["saturation"]["open"]))
+    row("open loop: requests start to wait at",
+        lambda a: wait_rate(summary["arms"][a]["saturation"]["open"]))
+    row("open loop: most completed at any tested rate",
+        lambda a: peak_open(summary["arms"][a]["saturation"]["open"]))
     qarms = [a for a in arms if "quality" in summary["arms"][a]]
     if qarms:
         for setname, label in (("mmlu-subset", "MMLU subset accuracy, 285 questions, %"),

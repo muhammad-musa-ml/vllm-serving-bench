@@ -76,20 +76,39 @@ def test_closed_saturation_not_reached_when_still_rising():
     assert sat["concurrency"] is None and "not reached" in sat["rule"]
 
 
-def test_open_saturation_by_latency_doubling_and_by_unfinished_work():
-    def lvl(p95, unfinished=0, completion=1.0):
-        return {"e2e_p95_s": {"median": p95}, "n_unfinished": {"max": unfinished},
-                "completion_ratio": {"median": completion}}
+def test_open_saturation_by_time_to_first_token_and_by_unfinished_work():
+    def lvl(ttft, unfinished=0, req_s=1.0, tok_s=100.0, e2e_p95=3.0):
+        return {"ttft_p50_s": {"median": ttft}, "n_unfinished": {"max": unfinished},
+                "req_s_overall": {"median": req_s}, "out_tok_s_overall": {"median": tok_s},
+                "e2e_p95_s": {"median": e2e_p95}}
 
-    by_latency = {"2.0": lvl(3.0), "4.0": lvl(3.4), "6.0": lvl(6.5), "8.0": lvl(20.0)}
-    assert report.open_saturation(by_latency)["rate"] == 6.0
-    by_unfinished = {"2.0": lvl(3.0), "4.0": lvl(3.1, unfinished=2)}
+    by_ttft = {"2.0": lvl(0.1), "4.0": lvl(0.12), "6.0": lvl(1.8), "8.0": lvl(9.0)}
+    sat = report.open_saturation(by_ttft)
+    assert sat["rate"] == 6.0 and "wait for a slot" in sat["reasons"][0]
+    by_unfinished = {"2.0": lvl(0.1), "4.0": lvl(0.2, unfinished=2)}
     assert report.open_saturation(by_unfinished)["rate"] == 4.0
-    by_completion = {"2.0": lvl(3.0), "4.0": lvl(3.2, completion=0.9)}
-    assert report.open_saturation(by_completion)["rate"] == 4.0
-    calm = {"2.0": lvl(3.0), "4.0": lvl(3.5)}
+    calm = {"2.0": lvl(0.1), "4.0": lvl(0.3)}
     assert report.open_saturation(calm)["rate"] is None
     assert report.open_saturation({})["rate"] is None
+
+
+def test_latency_growth_from_batching_alone_is_not_saturation():
+    """p95 end-to-end latency tripled, but no request waited for a slot: the rule must not fire."""
+    levels = {"2.0": {"ttft_p50_s": {"median": 0.1}, "e2e_p95_s": {"median": 1.3}},
+              "8.0": {"ttft_p50_s": {"median": 0.13}, "e2e_p95_s": {"median": 3.9}}}
+    assert report.open_saturation(levels)["rate"] is None
+
+
+def test_open_saturation_reports_the_peak_completed_throughput():
+    levels = {"4.0": {"ttft_p50_s": {"median": 0.1}, "req_s_overall": {"median": 4.0},
+                      "out_tok_s_overall": {"median": 512.0}},
+              "8.0": {"ttft_p50_s": {"median": 0.2}, "req_s_overall": {"median": 7.3},
+                      "out_tok_s_overall": {"median": 934.0}},
+              "12.0": {"ttft_p50_s": {"median": 9.0}, "req_s_overall": {"median": 7.2},
+                       "out_tok_s_overall": {"median": 921.0}}}
+    sat = report.open_saturation(levels)
+    assert sat["rate"] == 12.0
+    assert (sat["peak_req_s"], sat["peak_out_tok_s"], sat["peak_at_offered"]) == (7.3, 934.0, 8.0)
 
 
 def test_open_levels_aggregate_and_saturation_flows_into_summary(tmp_path):
@@ -98,7 +117,9 @@ def test_open_levels_aggregate_and_saturation_flows_into_summary(tmp_path):
     s = report.summarize_results(tmp_path, plots=False)
     a = s["arms"]["awq"]
     assert a["open"]["8.0"]["e2e_p95_s"]["median"] == 10
-    assert a["saturation"]["open"]["rate"] == 8.0
+    assert a["saturation"]["open"]["rate"] is None            # the helper's TTFT stays at 0.1 s
+    assert a["saturation"]["open"]["peak_at_offered"] == 8.0
+    assert a["saturation"]["open"]["peak_req_s"] == pytest.approx(8.0 * 0.95)
 
 
 def test_runs_csv_has_one_row_per_run_and_level(tmp_path):

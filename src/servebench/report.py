@@ -20,8 +20,7 @@ from .stats import fmt_range, mcnemar_exact, median_range, summarize
 RUN_FILE = re.compile(r"^run-(\d{2})\.json$")
 ARM_ORDER = ["fp16", "awq", "gptq"]
 KNEE_GAIN = 1.10          # closed loop: saturated when doubling the workers gains under 10%
-OPEN_P95_FACTOR = 2.0     # open loop: saturated when p95 e2e doubles against the lowest rate
-OPEN_MIN_COMPLETION = 0.95
+OPEN_TTFT_S = 1.0         # open loop: saturated when the median time to first token passes 1 s
 
 
 def dig(d, *keys):
@@ -153,28 +152,33 @@ def closed_saturation(closed: dict) -> dict:
 
 
 def open_saturation(opened: dict) -> dict:
-    """Lowest offered rate whose median p95 e2e is 2x the lowest rate's, or that leaves work undone."""
+    """Lowest offered rate at which requests wait for a slot: median TTFT over 1 s, or unfinished work.
+
+    TTFT is measured from the scheduled arrival, so it stays near the prefill time while the server
+    keeps up and jumps once a queue forms. (A first rule, p95 end-to-end latency doubling, fired at the
+    same rate for every arm because per-request latency also grows with batch size before any queue.)
+    Also reports the highest completed throughput seen at any tested rate.
+    """
     rates = sorted(float(r) for r in opened)
     if not rates:
         return {"rate": None, "rule": "no open-loop data"}
-    base = dig(opened[str(rates[0])], "e2e_p95_s", "median")
+    best = max(rates, key=lambda r: dig(opened[str(r)], "req_s_overall", "median") or 0)
+    peaks = {"peak_req_s": dig(opened[str(best)], "req_s_overall", "median"),
+             "peak_out_tok_s": dig(opened[str(best)], "out_tok_s_overall", "median"),
+             "peak_at_offered": best}
+    rule = f"median TTFT over {OPEN_TTFT_S:g} s, or requests left unfinished after the drain limit"
     for r in rates:
         m = opened[str(r)]
-        p95 = dig(m, "e2e_p95_s", "median")
+        ttft = dig(m, "ttft_p50_s", "median")
         unfinished_max = dig(m, "n_unfinished", "max") or 0
-        completion = dig(m, "completion_ratio", "median")
         reasons = []
-        if base and p95 and p95 >= OPEN_P95_FACTOR * base and r != rates[0]:
-            reasons.append(f"median p95 e2e {p95:.2f} s is {p95 / base:.1f}x the {base:.2f} s at "
-                           f"{rates[0]} req/s")
+        if ttft is not None and ttft > OPEN_TTFT_S:
+            reasons.append(f"median time to first token {ttft:.2f} s: requests wait for a slot")
         if unfinished_max > 0:
             reasons.append(f"up to {int(unfinished_max)} requests unfinished after the drain limit")
-        if completion is not None and completion < OPEN_MIN_COMPLETION:
-            reasons.append(f"only {completion * 100:.0f}% of arrivals completed")
         if reasons:
-            return {"rate": r, "reasons": reasons,
-                    "rule": "p95 e2e >= 2x the lowest rate's, or unfinished work, or <95% completed"}
-    return {"rate": None, "rule": "not reached within the tested rates"}
+            return {"rate": r, "reasons": reasons, "rule": rule, **peaks}
+    return {"rate": None, "rule": "not reached within the tested rates", **peaks}
 
 
 def aggregate_quality(runs: dict[str, dict]) -> dict:
@@ -376,16 +380,20 @@ def render_markdown(summary: dict) -> str:
         if "saturation" not in a:
             continue
         c, o = a["saturation"]["closed"], a["saturation"]["open"]
-        cc = (f"{c['concurrency']} workers ({c['tok_s_at_knee']:.1f} tok/s; the next level gives "
-              f"{c['tok_s_at_next']:.1f})" if c["concurrency"] else c["rule"])
-        oo = (f"{o['rate']} req/s offered: " + "; ".join(o["reasons"]) if o.get("rate") else o["rule"])
-        L += [f"- **{arm}**: closed loop knee at {cc}. Peak {c['peak_tok_s']:.1f} tok/s at "
-              f"{c['peak_concurrency']} workers. Open loop: {oo}."]
-    L += ["", "Rules: closed loop is saturated at the smallest worker count whose next level "
-          f"(double the workers) gains under {int((KNEE_GAIN - 1) * 100)}% in tokens/s. Open loop is "
-          f"saturated at the lowest offered rate where the median p95 end-to-end latency is "
-          f"{OPEN_P95_FACTOR:g}x the lowest rate's, or where any run left requests unfinished after "
-          f"the drain limit, or where under {int(OPEN_MIN_COMPLETION * 100)}% of arrivals completed.", ""]
+        cc = (f"the knee is at {c['concurrency']} workers ({c['tok_s_at_knee']:.1f} tok/s; the next level "
+              f"gives {c['tok_s_at_next']:.1f})" if c["concurrency"] else "no knee up to 16 workers")
+        oo = (f"requests start to wait at {o['rate']:g} req/s offered ({'; '.join(o['reasons'])})"
+              if o.get("rate") else o["rule"])
+        pk = (f" The most it completed at any tested rate was {o['peak_req_s']:.2f} req/s "
+              f"({o['peak_out_tok_s']:.0f} tok/s) at {o['peak_at_offered']:g} req/s offered."
+              if o.get("peak_req_s") else "")
+        L += [f"- **{arm}**: closed loop: {cc}, peak {c['peak_tok_s']:.1f} tok/s at "
+              f"{c['peak_concurrency']} workers. Open loop: {oo}.{pk}"]
+    L += ["", "Rules: the closed loop is saturated at the smallest worker count whose next level "
+          f"(double the workers) gains under {int((KNEE_GAIN - 1) * 100)}% in tokens/s. The open loop is "
+          f"saturated at the lowest offered rate where the median time to first token, measured from "
+          f"the scheduled arrival, is over {OPEN_TTFT_S:g} s, or where any run left requests "
+          f"unfinished after the drain limit.", ""]
     q_arms = [a for a in arms if "quality" in arms[a]]
     if q_arms:
         L += ["## Quality (fixed question sets, temperature 0)", "",
