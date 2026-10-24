@@ -1,0 +1,15 @@
+{
+  "dataset": "cais/mmlu",
+  "config": "all",
+  "split": "test",
+  "licence": "MIT",
+  "dataset_revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+  "url": "https://huggingface.co/datasets/cais/mmlu/resolve/c30699e8356da336a370243923dbaf21066bb9fe/all/test-00000-of-00001.parquet",
+  "fetched_utc": "2026-10-24T07:05:01Z",
+  "download_sha256": "74a41822ce7d3def56e1682f958469c04642a5336a5ce912fa375fdb90fb25d7",
+  "seed": 20261024,
+  "per_subject": 5,
+  "n_subjects": 57,
+  "n_questions": 285,
+  "n_rows_in_split": 14042
+}
