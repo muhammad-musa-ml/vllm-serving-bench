@@ -92,7 +92,7 @@ async def server_info(url: str) -> dict:
 def with_lock(args):
     if not args.lock_file:
         return None
-    lock = MeasurementLock(args.lock_file, args.lock_owner)
+    lock = MeasurementLock(args.lock_file, args.lock_owner, poll_s=args.lock_poll)
     print(f"waiting for the measurement lock {Path(args.lock_file).name} ...", flush=True)
     lock.acquire()
     print(f"lock taken after {lock.waited_s:.1f} s", flush=True)
@@ -113,6 +113,14 @@ def cmd_bench(args) -> int:
         capture_docker_ps(out / f"{name}.docker-ps.txt")
         idle = read_once()
         info = asyncio.run(server_info(args.url))
+        warmup_pass = None
+        if args.warmup_first and not args.warmup:
+            # a short pass inside the same lock hold, kept in the file but never counted
+            warmup_pass, _ = asyncio.run(run_pass(
+                args.url, prompts, model=args.model, levels=[4], open_rates=[],
+                max_tokens=args.max_tokens, open_duration_s=args.open_duration,
+                drain_s=args.drain, seed=args.seed, sampler=None, cooldown_s=args.cooldown,
+                n_override=24, log=lambda *_: None))
         with GpuSampler(interval_ms=args.gpu_interval_ms) as sampler:
             summaries, raw = asyncio.run(run_pass(
                 args.url, prompts, model=args.model, levels=levels, open_rates=rates,
@@ -144,6 +152,7 @@ def cmd_bench(args) -> int:
         "lock": ({"owner": args.lock_owner, "waited_s": lock.waited_s} if lock else None),
         "machine": {"python": sys.version.split()[0], "platform": platform.platform(),
                     "aiohttp": aiohttp.__version__},
+        "warmup_pass": warmup_pass,
         "levels": summaries,
     }
     write_json(out / f"{name}.json", result)
@@ -207,6 +216,8 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--out", required=True)
         sp.add_argument("--lock-file", default=None)
         sp.add_argument("--lock-owner", default="servebench")
+        sp.add_argument("--lock-poll", type=float, default=2.0,
+                        help="seconds between attempts to take the lock file")
 
     b = sub.add_parser("bench", help="one load pass: every closed-loop level, then open-loop rates")
     common(b)
@@ -220,6 +231,8 @@ def build_parser() -> argparse.ArgumentParser:
     b.add_argument("--seed", type=int, default=DEFAULT_SEED)
     b.add_argument("--gpu-interval-ms", type=int, default=250)
     b.add_argument("--warmup", action="store_true", help="short pass, written as warmup.json")
+    b.add_argument("--warmup-first", action="store_true",
+                   help="run a short uncounted pass inside the same lock hold, before the levels")
     b.set_defaults(func=cmd_bench)
 
     q = sub.add_parser("quality", help="answer the fixed question sets at temperature 0")

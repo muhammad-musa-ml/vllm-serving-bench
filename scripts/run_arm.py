@@ -71,7 +71,7 @@ def main():
     results = (ROOT / args.results).resolve()
     server_dir = results / "server" / args.arm
     server_dir.mkdir(parents=True, exist_ok=True)
-    lock_args = (["--lock-file", args.lock_file, "--lock-owner", args.lock_owner]
+    lock_args = (["--lock-file", args.lock_file, "--lock-owner", args.lock_owner, "--lock-poll", "0.05"]
                  if args.lock_file else [])
 
     stop_all_arms()
@@ -96,14 +96,12 @@ def main():
         f"{gpu_reading()}\n", encoding="utf-8", newline="\n")
     print(f"{args.arm}: healthy after {startup_s:.0f} s", flush=True)
 
-    servebench("bench", "--url", URL, "--arm", args.arm, "--out", str(results / "runs" / args.arm),
-               "--warmup", *lock_args)
-    (server_dir / "metrics-sample.txt").write_text(fetch("/metrics"), encoding="utf-8", newline="\n")
-
+    # every timed pass starts with a short uncounted warm-up inside the same lock hold
     for n in range(1, args.runs + 1):
         servebench("bench", "--url", URL, "--arm", args.arm, "--run", str(n),
                    "--out", str(results / "runs" / args.arm), "--open-rates", args.open_rates,
-                   "--open-duration", str(args.open_duration), *lock_args)
+                   "--open-duration", str(args.open_duration), "--warmup-first", *lock_args)
+    (server_dir / "metrics-sample.txt").write_text(fetch("/metrics"), encoding="utf-8", newline="\n")
     if not args.skip_quality:
         for n in range(1, args.runs + 1):
             servebench("quality", "--url", URL, "--arm", args.arm, "--run", str(n),

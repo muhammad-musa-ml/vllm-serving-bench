@@ -60,6 +60,21 @@ async def test_warmup_is_written_apart_from_the_numbered_runs(fake, tmp_path):
     assert not list(out.glob("run-*.json"))
 
 
+async def test_warmup_first_runs_inside_the_pass_and_is_not_counted(fake, tmp_path):
+    fake.token_delay = 0.001
+    lock = tmp_path / "m.lock"
+    out = tmp_path / "runs" / "fp16"
+    await run_cli("bench", "--url", fake.url, "--arm", "fp16", "--out", out, "--levels", "1",
+                  "--open-rates", "", "--cooldown", 0, "--max-tokens", 4, "--warmup-first",
+                  "--lock-file", lock, "--lock-owner", "P4", "--lock-poll", 0.01)
+    run = json.loads((out / "run-01.json").read_text(encoding="utf-8"))
+    assert [lv["n_requests"] for lv in run["warmup_pass"]] == [24]
+    assert [lv["n_requests"] for lv in run["levels"]] == [32]          # only the real level counts
+    assert fake.calls == 24 + 32
+    assert len(read_rows(out / "run-01.requests.jsonl.gz")) == 32      # warm-up requests are not kept
+    assert not lock.exists()
+
+
 async def test_quality_command_scores_and_writes_items(fake, tmp_path):
     fake.reply_fn = lambda body: "A"
     out = tmp_path / "quality" / "fp16"
