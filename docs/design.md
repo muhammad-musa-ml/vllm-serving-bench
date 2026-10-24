@@ -97,25 +97,38 @@ requests per level is `max(32, 16 x workers)`.
 **Open loop.** Requests arrive as a Poisson process at a fixed rate,
 whether or not the server has kept up. Latency is measured from the
 scheduled arrival time, not from when the client got round to sending, so a
-slow server cannot hide its queue (coordinated omission). Rates are fixed and
-the same for every arm; they were picked from a first exploratory pass
-(`results/exploratory/`) so that the list brackets every arm's saturation.
+slow server cannot hide its queue (coordinated omission). Each rate runs for
+40 s; after the last arrival the queue gets 60 s to drain and what is still
+running is cancelled and counted as unfinished. Rates (2, 4, 6, 8, 10 and 12
+requests per second) are fixed and the same for every arm. They were picked
+from one exploratory pass each on fp16 and gptq (`results/exploratory/`) so
+that the list brackets the saturation of the slowest and the fastest arm.
+Throughput is on the closed loop's basis, completed work over the time from
+the first arrival to the last completion. My first version counted only
+completions inside the arrival window, and a unit test showed that this reads
+low under load because requests that arrive late finish after the window.
 
-**GPU memory.** `nvidia-smi` is sampled five times a second while a level
+**GPU memory.** `nvidia-smi` is sampled four times a second while a level
 runs. The figure is total memory in use on the card, which includes what the
-desktop uses; the idle figure before the server starts is recorded next to it.
+desktop uses; the figure before the server starts is recorded next to it.
+vLLM reserves its memory when it starts, so this number hardly moves with load.
+What differs between arms is how much of the reservation holds weights and how
+much holds the KV cache; that is read from each arm's startup log
+(`results/server/<arm>/facts.json`).
 
-**Repeats.** Each configuration (arm x level) is measured in 5 passes. One
-warm-up pass runs first and is kept in the results folder but not counted.
-Tables report the median and the range of the 5 per-pass values. The
-per-request records are kept, so pooled percentiles over all five passes can
-be computed too.
+**Repeats.** Each configuration (arm x level) is measured in 5 passes. Every
+pass starts with a 24-request warm-up at 4 workers; it is kept in the run file
+(`warmup_pass`) but never counted. Tables report the median and the range of
+the 5 per-pass values. The per-request records are kept, so pooled percentiles
+over all five passes can be computed too.
 
 **Measurement lock.** On a shared machine a neighbour's build can steal CPU
-from the client or Docker. The harness can take an exclusive lock file
-(`--lock-file`) for the duration of a pass, waiting if another run holds it,
-and writes the output of `docker ps` beside every results file so the
-conditions are on record.
+from the client or Docker. `run_arm.py` takes an exclusive lock file for a
+whole arm: server start, the five timed passes, the quality runs and the
+shutdown, waiting if another run holds it, the way the other users of the
+machine held it for a batch of runs. The harness itself can also take the lock
+for one pass (`--lock-file`; fp16 run 1 was taken that way). `docker ps` is
+saved beside every run file so the conditions are on record.
 
 ## Quality set
 
