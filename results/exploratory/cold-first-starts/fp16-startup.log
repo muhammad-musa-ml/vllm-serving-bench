@@ -1,0 +1,234 @@
+vllm-fp16-1  | With `vllm serve`, you should provide the model as a positional argument or in a config file instead of via the `--model` option. The `--model` option will be removed in a future version.
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:49:33 [api_utils.py:347] 
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:49:33 [api_utils.py:347]        █     █     █▄   ▄█
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:49:33 [api_utils.py:347]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.32.0
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:49:33 [api_utils.py:347]   █▄█▀ █     █     █     █  model   Qwen/Qwen2.5-1.5B-Instruct
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:49:33 [api_utils.py:347]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:49:33 [api_utils.py:347] 
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:49:33 [api_utils.py:286] non-default args: {'model_tag': 'Qwen/Qwen2.5-1.5B-Instruct', 'host': '0.0.0.0', 'model': 'Qwen/Qwen2.5-1.5B-Instruct', 'dtype': 'float16', 'revision': '989aa7980e4cf806f80c7fef2b1adb7bc71aa306', 'max_model_len': 2048, 'served_model_name': ['bench'], 'gpu_memory_utilization': 0.8, 'enable_prefix_caching': False, 'max_num_seqs': 32}
+vllm-fp16-1  | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:50:00 [model.py:733] Resolved architecture: Qwen2ForCausalLM
+vllm-fp16-1  | (APIServer pid=1) WARNING 10-24 07:50:00 [model.py:2498] Casting torch.bfloat16 to torch.float16.
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:50:00 [model.py:2152] Using max model len 2048
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:50:01 [kernel.py:467] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'], gelu_and_mul_sparse=['triton', 'native'])
+vllm-fp16-1  | Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files:  22%|██▏       | 2/9 [00:00<00:00, 15.61it/s]Fetching 9 files:  44%|████▍     | 4/9 [00:00<00:00, 10.19it/s]Fetching 9 files:  67%|██████▋   | 6/9 [00:00<00:00, 10.28it/s]Fetching 9 files:  89%|████████▉ | 8/9 [00:00<00:00,  9.92it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 11.52it/s]
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:50:24 [core.py:133] Initializing a V1 LLM engine (v0.32.0) with config: model='Qwen/Qwen2.5-1.5B-Instruct', speculative_config=None, tokenizer='Qwen/Qwen2.5-1.5B-Instruct', skip_tokenizer_init=False, tokenizer_mode=auto, revision=989aa7980e4cf806f80c7fef2b1adb7bc71aa306, tokenizer_revision=989aa7980e4cf806f80c7fef2b1adb7bc71aa306, trust_remote_code=False, dtype=torch.float16, max_seq_len=2048, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, aux_output_config=AuxOutputConfig(enable_return_routed_experts=False, max_bytes=None), kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, per_request_spec_decode_metrics='none', kv_cache_metrics=False, kv_cache_metrics_sample=0.01, custom_histogram_buckets=None, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=bench, enable_prefix_caching=False, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::qwen4_exp_ple_short_conv', 'vllm::qwen4_exp_qsa_with_output', 'vllm::qwen4_exp_qsa_prepare_with_output', 'vllm::linear_attention', 'vllm::qwen_gdn_attention_core', 'vllm::qwen_gdn_attention_core_fused_norm_packed', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::hpc_rope_norm_forward', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'cudagraph_decoder_replay': True, 'decoder_replay_cudagraph_capture_sizes': [], 'decoder_replay_trim_threshold': 768, 'compile_sizes': [], 'compile_ranges_endpoints': [2048], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 64, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'], gelu_and_mul_sparse=['triton', 'native']), enable_flashinfer_autotune=True, enable_rocm_segmented_attn_autotune=False, enable_cutedsl_warmup=True, enable_jit_warmup=True, moe_backend='auto', sparse_indexer_topk_backend='auto', linear_backend='auto', linear_backend_per_quant=None)
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:50:31 [parallel_state.py:1906] world_size=1 rank=0 local_rank=0 distributed_init_method=file:///tmp/vllm_dist_de41e881cb854deda53cf3be486bad0f backend=nccl
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:50:31 [parallel_state.py:2350] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, ETP rank 0, EP rank N/A, EPLB rank N/A
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:50:31 [gpu_worker.py:518] Using V2 Model Runner
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:50:32 [buffer_utils.py:47] Pinned memory is not available on this platform; falling back to device memory for UVA buffers.
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:50:33 [model_runner.py:392] Loading model from scratch...
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:50:39 [cuda.py:506] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:50:39 [flash_attn.py:1117] Using FlashAttention version 2
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:50:40 [base_loader.py:82] Initializing model took 7.145328 seconds
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:53:37 [weight_utils.py:532] Time spent downloading weights for Qwen/Qwen2.5-1.5B-Instruct: 177.130881 seconds
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:53:37 [weight_utils.py:1108] Filesystem type for checkpoints: EXT4. Checkpoint size: 2.88 GiB. Available RAM: 6.36 GiB.
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:53:37 [weight_utils.py:1131] Auto-prefetch is disabled because the filesystem (EXT4) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
+vllm-fp16-1  | Loading safetensors checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:37 [utils.py:333] Attempted to load weight embed_tokens.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:38 [utils.py:333] Attempted to load weight layers.0.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:38 [utils.py:333] Attempted to load weight layers.0.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:38 [utils.py:333] Attempted to load weight layers.0.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:38 [utils.py:333] Attempted to load weight layers.0.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:38 [utils.py:333] Attempted to load weight layers.1.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:38 [utils.py:333] Attempted to load weight layers.1.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:38 [utils.py:333] Attempted to load weight layers.1.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:38 [utils.py:333] Attempted to load weight layers.1.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:38 [utils.py:333] Attempted to load weight layers.10.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:38 [utils.py:333] Attempted to load weight layers.10.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.10.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.10.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.11.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.11.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.11.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.11.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.12.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.12.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.12.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.12.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.13.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.13.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.13.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.13.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.14.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.14.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.14.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.14.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.15.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:39 [utils.py:333] Attempted to load weight layers.15.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:40 [utils.py:333] Attempted to load weight layers.15.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:40 [utils.py:333] Attempted to load weight layers.15.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:40 [utils.py:333] Attempted to load weight layers.16.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:40 [utils.py:333] Attempted to load weight layers.16.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:40 [utils.py:333] Attempted to load weight layers.16.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:40 [utils.py:333] Attempted to load weight layers.16.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:40 [utils.py:333] Attempted to load weight layers.17.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:40 [utils.py:333] Attempted to load weight layers.17.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:40 [utils.py:333] Attempted to load weight layers.17.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:40 [utils.py:333] Attempted to load weight layers.17.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:40 [utils.py:333] Attempted to load weight layers.18.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:40 [utils.py:333] Attempted to load weight layers.18.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:40 [utils.py:333] Attempted to load weight layers.18.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:40 [utils.py:333] Attempted to load weight layers.18.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.19.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.19.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.19.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.19.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.2.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.2.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.2.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.2.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.20.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.20.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.20.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.20.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.21.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.21.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.21.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.21.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.22.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:41 [utils.py:333] Attempted to load weight layers.22.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.22.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.22.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.23.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.23.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.23.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.23.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.24.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.24.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.24.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.24.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.25.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.25.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.25.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.25.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.26.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.26.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.26.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.26.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.27.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.27.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.27.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.27.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.3.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.3.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.3.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.3.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.4.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.4.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.4.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.4.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.5.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.5.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.5.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.5.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.6.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:42 [utils.py:333] Attempted to load weight layers.6.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight layers.6.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight layers.6.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight layers.7.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight layers.7.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight layers.7.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight layers.7.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight layers.8.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight layers.8.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight layers.8.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight layers.8.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight layers.9.input_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight layers.9.mlp.down_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight layers.9.post_attention_layernorm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight layers.9.self_attn.o_proj.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:53:43 [utils.py:333] Attempted to load weight norm.weight with dtype torch.bfloat16 into parameter with dtype torch.float16
+vllm-fp16-1  | Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:05<00:00,  5.38s/it]
+vllm-fp16-1  | Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:05<00:00,  5.38s/it]
+vllm-fp16-1  | 
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:53:43 [default_loader.py:501] Loading weights took 5.57 seconds
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:53:45 [model_runner.py:424] Model loading took 2.98 GiB memory and 193.179222 seconds
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:53:45 [topk_topp_sampler.py:124] Using FlashInfer for top-p & top-k sampling.
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:53:45 [torch_utils.py:295] Reducing Torch threads from 12 to 1 for serving. Set OMP_NUM_THREADS in the external environment to override.
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:53:45 [utils.py:347] Using LBNHC KV cache layout.
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:53:49 [monitor.py:40] [backbone] Starting torch.compile
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:00 [backends.py:1104] [backbone] Using cache directory: /root/.cache/vllm/torch_compile_cache/30a7a72301/rank_0_0/backbone for vLLM's torch.compile
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:00 [backends.py:1166] [backbone] Dynamo bytecode transform time: 10.21 s
+vllm-fp16-1  | [rank0]:W1024 07:54:10.269000 187 torch/_inductor/utils.py:1953] Not enough SMs to use max_autotune_gemm mode
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:14 [backends.py:398] [backbone] Compiling a graph for compile range (1, 2048) takes 13.55 s
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:20 [backends.py:927] collected artifacts: 29 entries, 3 artifacts, 4798384 bytes total
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:20 [decorators.py:743] [backbone] saved AOT compiled function to /root/.cache/vllm/torch_compile_cache/torch_aot_compile/6a97734b1a66768d7ee7ee31f58968177c11ba7bd6ba90791480390d1265f03c/rank_0_0/model
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:20 [monitor.py:62] [backbone] torch.compile took 30.78 s in total
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:21 [monitor.py:91] [backbone] Initial profiling/warmup run took 0.71 s
+vllm-fp16-1  | Capturing CUDA graphs (PIECEWISE):   0%|          | 0/11 [00:00<?, ?it/s]Capturing CUDA graphs (PIECEWISE):   9%|▉         | 1/11 [00:00<00:03,  3.10it/s]Capturing CUDA graphs (PIECEWISE):  18%|█▊        | 2/11 [00:00<00:02,  4.42it/s]Capturing CUDA graphs (PIECEWISE):  27%|██▋       | 3/11 [00:00<00:01,  5.79it/s]Capturing CUDA graphs (PIECEWISE):  36%|███▋      | 4/11 [00:00<00:01,  6.68it/s]Capturing CUDA graphs (PIECEWISE):  45%|████▌     | 5/11 [00:00<00:00,  6.71it/s]Capturing CUDA graphs (PIECEWISE):  64%|██████▎   | 7/11 [00:00<00:00,  9.36it/s]Capturing CUDA graphs (PIECEWISE):  82%|████████▏ | 9/11 [00:01<00:00, 10.19it/s]Capturing CUDA graphs (PIECEWISE): 100%|██████████| 11/11 [00:01<00:00,  9.14it/s]Capturing CUDA graphs (PIECEWISE): 100%|██████████| 11/11 [00:01<00:00,  7.78it/s]
+vllm-fp16-1  | Capturing CUDA graphs (FULL):   0%|          | 0/2 [00:00<?, ?it/s]Capturing CUDA graphs (FULL): 100%|██████████| 2/2 [00:00<00:00, 15.24it/s]Capturing CUDA graphs (FULL): 100%|██████████| 2/2 [00:00<00:00, 15.21it/s]
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:26 [model_runner.py:1127] Graph capturing finished in 3 secs, took 0.10 GiB
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:26 [gpu_worker.py:759] Available KV cache memory: 1.13 GiB
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:26 [gpu_worker.py:774] CUDA graph memory profiling is enabled (default since v0.21.0). The current --gpu-memory-utilization=0.8000 is equivalent to --gpu-memory-utilization=0.7805 without CUDA graph memory profiling. To maintain the same effective KV cache size as before, increase --gpu-memory-utilization to 0.8195. To disable, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=0.
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:26 [kv_cache_utils.py:2327] GPU KV cache size: 42,432 tokens, Maximum concurrency for 2,048 tokens per request: 20.72x
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:27 [kernel_warmup.py:176] JIT kernel warmup starting.
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:27 [kernel_warmup.py:189] JIT kernel warmup finished in 0.00s.
+vllm-fp16-1  | Capturing CUDA graphs (PIECEWISE):   0%|          | 0/11 [00:00<?, ?it/s]Capturing CUDA graphs (PIECEWISE):  18%|█▊        | 2/11 [00:00<00:00, 13.05it/s]Capturing CUDA graphs (PIECEWISE):  36%|███▋      | 4/11 [00:00<00:00, 13.20it/s]Capturing CUDA graphs (PIECEWISE):  55%|█████▍    | 6/11 [00:00<00:00, 12.38it/s]Capturing CUDA graphs (PIECEWISE):  73%|███████▎  | 8/11 [00:00<00:00, 11.92it/s]Capturing CUDA graphs (PIECEWISE):  91%|█████████ | 10/11 [00:00<00:00, 12.67it/s]Capturing CUDA graphs (PIECEWISE): 100%|██████████| 11/11 [00:00<00:00, 12.86it/s]
+vllm-fp16-1  | Capturing CUDA graphs (FULL):   0%|          | 0/7 [00:00<?, ?it/s]Capturing CUDA graphs (FULL):  29%|██▊       | 2/7 [00:00<00:00, 17.27it/s]Capturing CUDA graphs (FULL):  57%|█████▋    | 4/7 [00:00<00:00, 14.24it/s]Capturing CUDA graphs (FULL): 100%|██████████| 7/7 [00:00<00:00, 17.39it/s]Capturing CUDA graphs (FULL): 100%|██████████| 7/7 [00:00<00:00, 16.83it/s]
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:33 [model_runner.py:1127] Graph capturing finished in 2 secs, took 0.06 GiB
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:33 [gpu_worker.py:971] CUDA graph pool memory: 0.06 GiB (actual), 0.12 GiB (estimated), difference: 0.05 GiB (87.5%).
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:33 [gpu_worker.py:1034] Free memory on device (4.95/6.0 GiB) on startup. Desired GPU memory utilization is (0.8, 4.8 GiB). Actual usage is 3.11 GiB for consumed memory (weights + non-torch), 0.56 GiB for peak activation, and 0.06 GiB for CUDAGraph memory. Replace gpu_memory_utilization config with `--kv-cache-memory=992490087` (0.92 GiB) to fit into requested memory, or `--kv-cache-memory=1159842816` (1.08 GiB) to fully utilize gpu memory. Current kv cache memory in use is 1.13 GiB.
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:35 [jit_monitor.py:84] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:36 [core.py:395] init engine (profile, create kv cache, warmup model) took 50.09 s (compilation: 30.78 s)
+vllm-fp16-1  | Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 937.25it/s]
+vllm-fp16-1  | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+vllm-fp16-1  | (EngineCore pid=187) INFO 10-24 07:54:38 [kernel.py:467] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'], gelu_and_mul_sparse=['triton', 'native'])
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:38 [entry.py:136] Supported tasks: ['generate']
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:40 [factories.py:89] Scale-out endpoints are disabled. Restart vllm serve with --enable-scale-out to enable them.
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [hf.py:648] Detected the chat template content format to be 'string'. You can set `--chat-template-content-format` to override this.
+vllm-fp16-1  | (APIServer pid=1) WARNING 10-24 07:54:41 [model.py:1893] Default vLLM sampling parameters have been overridden by the model's `generation_config.json`: `{'repetition_penalty': 1.1, 'temperature': 0.7, 'top_k': 20, 'top_p': 0.8}`. If this is not intended, please relaunch vLLM instance with `--generation-config vllm`.
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [entry.py:140] Starting vLLM server on http://0.0.0.0:8000
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:186] Available routes are:
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /openapi.json, Methods: HEAD, GET
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /docs, Methods: HEAD, GET
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /docs/oauth2-redirect, Methods: HEAD, GET
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /redoc, Methods: HEAD, GET
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /load, Methods: GET
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /version, Methods: GET
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /kv_event_sources, Methods: GET
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /health, Methods: GET
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /metrics, Methods: GET
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /tokenize, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /detokenize, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/models, Methods: GET
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/systemone, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /ping, Methods: GET
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /ping, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /invocations, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/chat/completions, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/chat/completions/batch, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/responses, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/responses/{response_id}, Methods: GET
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/responses/{response_id}/cancel, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/completions, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/messages, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/messages/count_tokens, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /generative_scoring, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /scale_elastic_ep, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /is_scaling_elastic_ep, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/chat/completions/render, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/messages/render, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/completions/render, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/responses/render, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/chat/completions/derender, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /v1/completions/derender, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /inference/v1/generate, Methods: POST
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:54:41 [launcher.py:195] Route: /inference/v1/abort_requests, Methods: POST
+vllm-fp16-1  | INFO:     Started server process [1]
+vllm-fp16-1  | INFO:     Waiting for application startup.
+vllm-fp16-1  | INFO:     Application startup complete.
+vllm-fp16-1  | INFO:     172.23.0.2:43034 - "GET /metrics HTTP/1.1" 200 OK
+vllm-fp16-1  | INFO:     172.23.0.2:43034 - "GET /metrics HTTP/1.1" 200 OK
+vllm-fp16-1  | INFO:     127.0.0.1:36426 - "GET /health HTTP/1.1" 200 OK
+vllm-fp16-1  | INFO:     172.23.0.2:43034 - "GET /metrics HTTP/1.1" 200 OK
+vllm-fp16-1  | INFO:     172.23.0.2:43034 - "GET /metrics HTTP/1.1" 200 OK
+vllm-fp16-1  | INFO:     127.0.0.1:35306 - "GET /health HTTP/1.1" 200 OK
+vllm-fp16-1  | INFO:     172.23.0.2:43034 - "GET /metrics HTTP/1.1" 200 OK
+vllm-fp16-1  | INFO:     172.23.0.2:43034 - "GET /metrics HTTP/1.1" 200 OK
+vllm-fp16-1  | INFO:     172.23.0.1:45960 - "GET /health HTTP/1.1" 200 OK
+vllm-fp16-1  | INFO:     172.23.0.1:45974 - "GET /version HTTP/1.1" 200 OK
+vllm-fp16-1  | (EngineCore pid=187) WARNING 10-24 07:55:21 [jit_monitor.py:140] Triton kernel JIT compilation during inference: _gumbel_sample_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+vllm-fp16-1  | INFO:     172.23.0.1:45986 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+vllm-fp16-1  | INFO:     172.23.0.1:46002 - "GET /metrics HTTP/1.1" 200 OK
+vllm-fp16-1  | (APIServer pid=1) INFO 10-24 07:55:22 [loggers.py:335] Engine 000: Avg prompt throughput: 3.6 tokens/s, Avg generation throughput: 0.2 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%

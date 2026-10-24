@@ -1,0 +1,26 @@
+{
+  "arm": "awq",
+  "source": "results/server/awq/startup.log",
+  "model_loading_gib": 1.1,
+  "model_loading_s": 132.61064,
+  "kv_cache_gib": 3.07,
+  "kv_cache_tokens": 115072,
+  "max_concurrency_at_max_len": 56.19,
+  "engine_init_s": 67.14,
+  "compilation_s": 39.39,
+  "free_memory_gib_at_startup": 4.95,
+  "total_memory_gib": 6.0,
+  "attention_backend": "FLASH_ATTN",
+  "linear_kernel": "MarlinLinearKernel",
+  "linear_method": "AutoAWQMarlinLinearMethod",
+  "vllm_version": "0.32.0",
+  "quantization_lines": [
+    "(EngineCore pid=178) INFO 10-24 08:09:26 [__init__.py:923] Using MarlinLinearKernel for mixed-precision linear",
+    "(EngineCore pid=178) INFO 10-24 08:09:26 [auto_awq.py:451] Using MarlinLinearKernel for AutoAWQMarlinLinearMethod"
+  ],
+  "weight_dtype_cast_warnings": 0,
+  "warnings": [
+    "WARNING [buffer_utils.py:47] Pinned memory is not available on this platform; falling back to device memory for UVA buffers.",
+    "Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads."
+  ]
+}
