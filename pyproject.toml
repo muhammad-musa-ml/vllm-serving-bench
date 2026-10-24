@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "servebench"
+version = "0.1.0"
+description = "Load harness, quality checks and report tools for measuring an OpenAI-compatible model server"
+requires-python = ">=3.11"
+dependencies = ["aiohttp>=3.9"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "pyyaml>=6", "ruff>=0.5"]
+report = ["matplotlib>=3.8"]
+data = ["pyarrow>=15"]
+
+[project.scripts]
+servebench = "servebench.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
