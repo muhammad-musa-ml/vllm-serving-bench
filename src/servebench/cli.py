@@ -140,7 +140,7 @@ def cmd_bench(args) -> int:
             "model": args.model, "gpu_interval_ms": args.gpu_interval_ms,
         },
         "server": info,
-        "gpu_idle_before": idle,
+        "gpu_before_pass": idle,
         "lock": ({"owner": args.lock_owner, "waited_s": lock.waited_s} if lock else None),
         "machine": {"python": sys.version.split()[0], "platform": platform.platform(),
                     "aiohttp": aiohttp.__version__},

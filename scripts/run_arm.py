@@ -75,6 +75,9 @@ def main():
                  if args.lock_file else [])
 
     stop_all_arms()
+    (server_dir / "gpu-before-server.txt").write_text(
+        f"# memory.used MiB, memory.total MiB, utilization.gpu % ({utc_now()}, no model server running)\n"
+        f"{gpu_reading()}\n", encoding="utf-8", newline="\n")
     t_up = time.time()
     compose("--profile", arm["profile"], "up", "-d", "--wait", "--wait-timeout", "1500")
     startup_s = time.time() - t_up
