@@ -1,0 +1,25 @@
+{
+  "arm": "awq",
+  "source": "results/server/awq/startup.log",
+  "model_loading_gib": 1.1,
+  "model_loading_s": 19.666675,
+  "kv_cache_gib": 3.4,
+  "kv_cache_tokens": 127280,
+  "max_concurrency_at_max_len": 62.15,
+  "engine_init_s": 16.61,
+  "compilation_s": 2.44,
+  "free_memory_gib_at_startup": 4.95,
+  "total_memory_gib": 6.0,
+  "attention_backend": "FLASH_ATTN",
+  "linear_kernel": "MarlinLinearKernel",
+  "linear_method": "AutoAWQMarlinLinearMethod",
+  "vllm_version": "0.32.0",
+  "quantization_lines": [
+    "(EngineCore pid=160) INFO 10-24 11:21:48 [__init__.py:923] Using MarlinLinearKernel for mixed-precision linear",
+    "(EngineCore pid=160) INFO 10-24 11:21:48 [auto_awq.py:451] Using MarlinLinearKernel for AutoAWQMarlinLinearMethod"
+  ],
+  "weight_dtype_cast_warnings": 0,
+  "warnings": [
+    "WARNING [buffer_utils.py:47] Pinned memory is not available on this platform; falling back to device memory for UVA buffers."
+  ]
+}

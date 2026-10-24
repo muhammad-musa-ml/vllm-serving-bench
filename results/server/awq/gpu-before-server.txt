@@ -1,0 +1,2 @@
+# memory.used MiB, memory.total MiB, utilization.gpu % (2026-10-24T11:20:57Z, no model server running)
+380, 6141, 0

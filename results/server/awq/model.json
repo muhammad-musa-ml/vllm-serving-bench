@@ -1,0 +1,18 @@
+{
+  "arm": "awq",
+  "model": "Qwen/Qwen2.5-1.5B-Instruct-AWQ",
+  "revision": "3ecffa0ceb27851800f45519bab9c457a04405e1",
+  "dtype": "float16",
+  "weights": "4-bit AWQ",
+  "license": "apache-2.0",
+  "image": "vllm/vllm-openai:v0.32.0",
+  "server_flags": {
+    "max-model-len": "2048",
+    "gpu-memory-utilization": "0.80",
+    "max-num-seqs": "32",
+    "no-enable-prefix-caching": true,
+    "generation-config": "vllm"
+  },
+  "start_to_healthy_s": 95.9,
+  "started_utc": "2026-10-24T11:22:34Z"
+}

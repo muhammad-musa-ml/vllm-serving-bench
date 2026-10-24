@@ -1,0 +1,222 @@
+{
+  "arm": "awq",
+  "checked_utc": "2026-10-24T12:47:34Z",
+  "targets": {
+    "gpu": {
+      "health": "up",
+      "last_error": "",
+      "scrape_url": "http://gpu-exporter:9835/metrics"
+    },
+    "prometheus": {
+      "health": "up",
+      "last_error": "",
+      "scrape_url": "http://localhost:9090/metrics"
+    },
+    "vllm": {
+      "health": "up",
+      "last_error": "",
+      "scrape_url": "http://vllm:8000/metrics"
+    }
+  },
+  "dashboard_queries": {
+    "total": 25,
+    "errors": 0,
+    "without_series": [],
+    "queries": [
+      {
+        "panel": "Requests running and waiting",
+        "refId": "A",
+        "expr": "sum(vllm:num_requests_running)",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "Requests running and waiting",
+        "refId": "B",
+        "expr": "sum(vllm:num_requests_waiting)",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "KV-cache usage",
+        "refId": "A",
+        "expr": "avg(vllm:kv_cache_usage_perc)",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "Tokens per second",
+        "refId": "A",
+        "expr": "sum(rate(vllm:generation_tokens_total[$__rate_interval]))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "Tokens per second",
+        "refId": "B",
+        "expr": "sum(rate(vllm:prompt_tokens_total[$__rate_interval]))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "Time to first token",
+        "refId": "A",
+        "expr": "histogram_quantile(0.5, sum by (le) (rate(vllm:time_to_first_token_seconds_bucket[$__rate_interval])))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "Time to first token",
+        "refId": "B",
+        "expr": "histogram_quantile(0.95, sum by (le) (rate(vllm:time_to_first_token_seconds_bucket[$__rate_interval])))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "Time to first token",
+        "refId": "C",
+        "expr": "histogram_quantile(0.99, sum by (le) (rate(vllm:time_to_first_token_seconds_bucket[$__rate_interval])))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "End-to-end request latency",
+        "refId": "A",
+        "expr": "histogram_quantile(0.5, sum by (le) (rate(vllm:e2e_request_latency_seconds_bucket[$__rate_interval])))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "End-to-end request latency",
+        "refId": "B",
+        "expr": "histogram_quantile(0.95, sum by (le) (rate(vllm:e2e_request_latency_seconds_bucket[$__rate_interval])))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "End-to-end request latency",
+        "refId": "C",
+        "expr": "histogram_quantile(0.99, sum by (le) (rate(vllm:e2e_request_latency_seconds_bucket[$__rate_interval])))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "Inter-token latency",
+        "refId": "A",
+        "expr": "histogram_quantile(0.5, sum by (le) (rate(vllm:inter_token_latency_seconds_bucket[$__rate_interval])))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "Inter-token latency",
+        "refId": "B",
+        "expr": "histogram_quantile(0.95, sum by (le) (rate(vllm:inter_token_latency_seconds_bucket[$__rate_interval])))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "Inter-token latency",
+        "refId": "C",
+        "expr": "histogram_quantile(0.99, sum by (le) (rate(vllm:inter_token_latency_seconds_bucket[$__rate_interval])))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "Requests finished per second",
+        "refId": "A",
+        "expr": "sum by (finished_reason) (rate(vllm:request_success_total[$__rate_interval]))",
+        "status": "success",
+        "series": 5
+      },
+      {
+        "panel": "Queue time",
+        "refId": "A",
+        "expr": "histogram_quantile(0.5, sum by (le) (rate(vllm:request_queue_time_seconds_bucket[$__rate_interval])))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "Queue time",
+        "refId": "B",
+        "expr": "histogram_quantile(0.95, sum by (le) (rate(vllm:request_queue_time_seconds_bucket[$__rate_interval])))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "Queue time",
+        "refId": "C",
+        "expr": "histogram_quantile(0.99, sum by (le) (rate(vllm:request_queue_time_seconds_bucket[$__rate_interval])))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "Preemptions per second",
+        "refId": "A",
+        "expr": "sum(rate(vllm:num_preemptions_total[$__rate_interval]))",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "GPU memory",
+        "refId": "A",
+        "expr": "gpu_memory_used_mib",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "GPU memory",
+        "refId": "B",
+        "expr": "gpu_memory_total_mib",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "GPU utilization and clock",
+        "refId": "A",
+        "expr": "gpu_utilization_percent",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "GPU utilization and clock",
+        "refId": "B",
+        "expr": "gpu_sm_clock_mhz",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "GPU temperature and power",
+        "refId": "A",
+        "expr": "gpu_temperature_celsius",
+        "status": "success",
+        "series": 1
+      },
+      {
+        "panel": "GPU temperature and power",
+        "refId": "B",
+        "expr": "gpu_power_watts",
+        "status": "success",
+        "series": 1
+      }
+    ]
+  },
+  "grafana": {
+    "version": "12.0.2",
+    "dashboards": [
+      "vLLM serving"
+    ],
+    "datasource_query_frames": 3
+  },
+  "token_crosscheck": {
+    "available": true,
+    "window_start_utc": "2026-10-24T12:11:04Z",
+    "window_end_utc": "2026-10-24T12:46:26Z",
+    "expr": "sum(increase(vllm:generation_tokens_total[2144s]))",
+    "server_generation_tokens": 1398949.1935484775,
+    "harness_completion_tokens": 1382400,
+    "harness_requests": 10800,
+    "ratio_server_to_harness": 1.0119713494997666,
+    "note": "increase() extrapolates at the window edges and counts tokens of requests the harness cancelled; expect the server figure to be slightly higher"
+  },
+  "ok": true
+}
