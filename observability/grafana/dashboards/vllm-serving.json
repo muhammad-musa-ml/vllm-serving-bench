@@ -400,7 +400,7 @@
       "id": 7,
       "type": "timeseries",
       "title": "Requests finished per second",
-      "description": "",
+      "description": "By finish reason: length is a request that reached its token limit, stop one that ended on its own.",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -418,11 +418,7 @@
             "lineWidth": 2,
             "fillOpacity": 10,
             "showPoints": "never",
-            "spanNulls": true,
-            "stacking": {
-              "mode": "normal",
-              "group": "A"
-            }
+            "spanNulls": true
           }
         },
         "overrides": []
