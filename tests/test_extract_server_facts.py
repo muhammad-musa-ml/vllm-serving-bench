@@ -48,8 +48,17 @@ def test_missing_values_are_null_not_guessed():
     assert f["warnings"] == [] and f["quantization_lines"] == []
 
 
-def test_quantization_lines_pick_up_marlin_kernel_messages():
-    text = ("vllm-awq-1  | (EngineCore pid=1) INFO 10-24 08:10:00 [awq_marlin.py:1] The model is "
-            "convertible to awq_marlin during runtime. Using awq_marlin kernel.")
+def test_quantization_kernel_is_read_from_the_log_line_the_server_prints():
+    text = ("vllm-awq-1  | (EngineCore pid=178) INFO 10-24 08:09:26 [auto_awq.py:451] "
+            "Using MarlinLinearKernel for AutoAWQMarlinLinearMethod\n"
+            "vllm-awq-1  | (APIServer pid=1) INFO 10-24 08:08:45 [api_utils.py:347]   model   "
+            "Qwen/Qwen2.5-1.5B-Instruct-AWQ")
     f = extract.parse(text)
-    assert any("awq_marlin" in ln for ln in f["quantization_lines"])
+    assert f["linear_kernel"] == "MarlinLinearKernel"
+    assert f["linear_method"] == "AutoAWQMarlinLinearMethod"
+    assert len(f["quantization_lines"]) == 1 and "Kernel for" in f["quantization_lines"][0]
+
+
+def test_fp16_log_has_no_quantization_kernel():
+    f = extract.parse(EXCERPT)
+    assert f["linear_kernel"] is None and f["quantization_lines"] == []

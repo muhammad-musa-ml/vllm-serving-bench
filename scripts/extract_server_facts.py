@@ -24,10 +24,12 @@ PATTERNS = {
     "free_memory_gib_at_startup": (r"Free memory on device \(([0-9.]+)/[0-9.]+ GiB\) on startup", 1, float),
     "total_memory_gib": (r"Free memory on device \([0-9.]+/([0-9.]+) GiB\) on startup", 1, float),
     "attention_backend": (r"Using (\w+) attention backend", 1, str),
+    "linear_kernel": (r"Using (\w+Kernel) for (\w+LinearMethod)", 1, str),
+    "linear_method": (r"Using (\w+Kernel) for (\w+LinearMethod)", 2, str),
     "vllm_version": (r"Initializing a V1 LLM engine \(v([0-9.]+)\)", 1, str),
 }
-INTERESTING = re.compile(r"quantiz|marlin|awq|gptq|kernel", re.I)
-NOISE = re.compile(r"Capturing CUDA graphs|Fetching|it/s\]|Route:|GET /|POST /")
+INTERESTING = re.compile(r"Kernel for|quantization", re.I)
+NOISE = re.compile(r"Capturing CUDA graphs|Fetching|it/s\]|Route:|GET /|POST /|api_utils\.py")
 
 
 def parse(text):
