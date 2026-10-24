@@ -7,6 +7,15 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
+from matplotlib.ticker import FuncFormatter  # noqa: E402
+
+
+def plain_log_axis(axis):
+    """Log scale with ticks written as plain numbers (1, 2, 5, 10 ...) instead of powers of ten."""
+    fmt = FuncFormatter(lambda v, _: f"{v:g}")
+    axis.set_major_formatter(fmt)
+    axis.set_minor_formatter(FuncFormatter(lambda v, _: f"{v:g}" if f"{v:.0e}"[0] in "235" else ""))
+
 
 COLORS = {"fp16": "#1f4e79", "awq": "#c0504d", "gptq": "#4f8f3a"}
 MARKERS = {"fp16": "o", "awq": "s", "gptq": "^"}
@@ -79,6 +88,7 @@ def make_plots(summary: dict, outdir: Path) -> list[Path]:
     _style(axes[1], "concurrent requests (closed loop)", "time to first token, ms",
            "Time to first token")
     axes[1].set_yscale("log")
+    plain_log_axis(axes[1].yaxis)
     axes[0].legend(frameon=False, fontsize=8, ncol=2)
     fig.tight_layout()
     p = outdir / "latency-vs-concurrency.png"
@@ -100,6 +110,7 @@ def make_plots(summary: dict, outdir: Path) -> list[Path]:
         _style(axes[0], "offered load, requests / s (Poisson arrivals)", "p95 end-to-end latency, s",
                "Open loop: latency from the scheduled arrival")
         axes[0].set_yscale("log")
+        plain_log_axis(axes[0].yaxis)
         _style(axes[1], "offered load, requests / s (Poisson arrivals)", "completed requests / s",
                "Open loop: completed against offered")
         axes[0].legend(frameon=False)
