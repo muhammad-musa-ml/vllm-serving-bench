@@ -28,7 +28,8 @@ def utc_now():
 
 def compose(*args, check=True, capture=False):
     cmd = ["docker", "compose", "-f", str(ROOT / "docker-compose.yml"), *args]
-    return subprocess.run(cmd, check=check, capture_output=capture, text=True, cwd=ROOT)
+    return subprocess.run(cmd, check=check, capture_output=capture, text=True, encoding="utf-8",
+                          errors="replace", cwd=ROOT)
 
 
 def servebench(*args):
