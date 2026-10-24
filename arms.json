@@ -1,0 +1,39 @@
+{
+  "image": "vllm/vllm-openai:v0.32.0-cu129",
+  "served_model_name": "bench",
+  "server_flags": {
+    "max-model-len": "2048",
+    "gpu-memory-utilization": "0.80",
+    "max-num-seqs": "32",
+    "no-enable-prefix-caching": true
+  },
+  "arms": {
+    "fp16": {
+      "profile": "fp16",
+      "service": "vllm-fp16",
+      "model": "Qwen/Qwen2.5-1.5B-Instruct",
+      "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "dtype": "float16",
+      "weights": "16-bit",
+      "license": "apache-2.0"
+    },
+    "awq": {
+      "profile": "awq",
+      "service": "vllm-awq",
+      "model": "Qwen/Qwen2.5-1.5B-Instruct-AWQ",
+      "revision": "3ecffa0ceb27851800f45519bab9c457a04405e1",
+      "dtype": "float16",
+      "weights": "4-bit AWQ",
+      "license": "apache-2.0"
+    },
+    "gptq": {
+      "profile": "gptq",
+      "service": "vllm-gptq",
+      "model": "Qwen/Qwen2.5-1.5B-Instruct-GPTQ-Int4",
+      "revision": "4f5a0e31008e2966e8f787964bcc4e1105e03dc3",
+      "dtype": "float16",
+      "weights": "4-bit GPTQ",
+      "license": "apache-2.0"
+    }
+  }
+}

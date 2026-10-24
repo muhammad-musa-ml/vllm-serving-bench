@@ -1,0 +1,39 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tests:
+    name: lint and unit tests (python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: pip install -e ".[dev,report]"
+      - run: ruff check .
+      - run: pytest -q
+
+  config:
+    name: compose and prometheus configuration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: docker compose config for every arm
+        run: |
+          for arm in fp16 awq gptq; do
+            docker compose --profile "$arm" config -q
+          done
+      - name: promtool check config
+        run: |
+          docker run --rm --entrypoint promtool \
+            -v "$PWD/observability/prometheus/prometheus.yml:/prometheus.yml:ro" \
+            prom/prometheus:v3.5.0 check config /prometheus.yml

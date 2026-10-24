@@ -1,0 +1,156 @@
+name: vllm-serving-bench
+
+# One model server runs at a time: start the arm you want with a profile, e.g.
+#   docker compose --profile fp16 up -d
+# Every arm is reachable at 127.0.0.1:18480 and, inside the network, as `vllm:8000`.
+# Host ports used: 18480 (model server), 18490 (Prometheus), 18491 (Grafana).
+
+x-vllm: &vllm
+  image: vllm/vllm-openai:v0.32.0-cu129
+  ipc: host
+  ports:
+    - "127.0.0.1:18480:8000"
+  volumes:
+    - hf-cache:/root/.cache/huggingface
+  environment:
+    VLLM_NO_USAGE_STATS: "1"
+    DO_NOT_TRACK: "1"
+    HF_HUB_DISABLE_TELEMETRY: "1"
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+  networks:
+    default:
+      aliases:
+        - vllm
+  healthcheck:
+    test:
+      - CMD
+      - python3
+      - -c
+      - "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"
+    interval: 10s
+    timeout: 5s
+    retries: 90
+    start_period: 30s
+
+services:
+  vllm-fp16:
+    <<: *vllm
+    profiles: [fp16]
+    command:
+      - --model
+      - Qwen/Qwen2.5-1.5B-Instruct
+      - --revision
+      - 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+      - --served-model-name
+      - bench
+      - --dtype
+      - float16
+      - --max-model-len
+      - "2048"
+      - --gpu-memory-utilization
+      - "0.80"
+      - --max-num-seqs
+      - "32"
+      - --no-enable-prefix-caching
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+
+  vllm-awq:
+    <<: *vllm
+    profiles: [awq]
+    command:
+      - --model
+      - Qwen/Qwen2.5-1.5B-Instruct-AWQ
+      - --revision
+      - 3ecffa0ceb27851800f45519bab9c457a04405e1
+      - --served-model-name
+      - bench
+      - --dtype
+      - float16
+      - --max-model-len
+      - "2048"
+      - --gpu-memory-utilization
+      - "0.80"
+      - --max-num-seqs
+      - "32"
+      - --no-enable-prefix-caching
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+
+  vllm-gptq:
+    <<: *vllm
+    profiles: [gptq]
+    command:
+      - --model
+      - Qwen/Qwen2.5-1.5B-Instruct-GPTQ-Int4
+      - --revision
+      - 4f5a0e31008e2966e8f787964bcc4e1105e03dc3
+      - --served-model-name
+      - bench
+      - --dtype
+      - float16
+      - --max-model-len
+      - "2048"
+      - --gpu-memory-utilization
+      - "0.80"
+      - --max-num-seqs
+      - "32"
+      - --no-enable-prefix-caching
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+
+  gpu-exporter:
+    build: ./docker/gpu-exporter
+    environment:
+      NVIDIA_DRIVER_CAPABILITIES: utility
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [utility]
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=30d
+    ports:
+      - "127.0.0.1:18490:9090"
+    volumes:
+      - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+
+  grafana:
+    image: grafana/grafana:12.0.2
+    ports:
+      - "127.0.0.1:18491:3000"
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/vllm-serving.json
+    volumes:
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+
+volumes:
+  hf-cache:
+  prometheus-data:
